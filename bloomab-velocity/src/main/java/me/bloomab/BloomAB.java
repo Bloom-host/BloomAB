@@ -125,25 +125,17 @@ public class BloomAB  {
             }
 
             CommandManager commandManager = server.getCommandManager();
-            // Here you can add meta for the command, as aliases and the plugin to which it belongs (RECOMMENDED)
             CommandMeta commandMeta = commandManager.metaBuilder("bloomab")
-                    // This will create a new alias for the command "/test"
-                    // with the same arguments and functionality
                     .aliases("bab")
                     .plugin(this)
                     .build();
 
-            // You can replace this with "new EchoCommand()" or "new TestCommand()"
-            // SimpleCommand simpleCommand = new TestCommand();
-            // RawCommand rawCommand = new EchoCommand();
-            // The registration is done in the same way, since all 3 interfaces implement "Command"
 
-            // Finally, you can register the command
             commandManager.register(commandMeta, new me.bloomab.commands.CommandManager(this));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // more initialization code here
+
     }
 
     @SneakyThrows
