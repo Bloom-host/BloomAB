@@ -1,0 +1,31 @@
+plugins {
+    // Use ShadowJAR to build the JAR
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    // Use Blossom to replace tokens
+    id 'net.kyori.blossom' version '1.3.0'
+}
+
+// Include the Velocity repository
+repositories { maven { url 'https://repo.papermc.io/repository/maven-public/' } }
+
+dependencies {
+    // Include the common
+    implementation project(':common')
+
+    // Velocity is used at compile and annotation processing times
+    compileOnly 'com.velocitypowered:velocity-api:3.0.0'
+    annotationProcessor 'com.velocitypowered:velocity-api:3.0.0'
+}
+
+// Change the BloomAB.java details based on the project settings
+blossom {
+    replaceTokenIn('src/main/java/host/bloom/ab/velocity/BloomAB.java')
+    replaceToken '@name@', project.pluginName
+    replaceToken '@id@', project.pluginName.toLowerCase()
+    replaceToken '@version@', project.pluginVersion
+    replaceToken '@description@', project.pluginDescription
+}
+
+// Create the JAR
+shadowJar { archiveFileName = "${project.pluginName}-${project.pluginVersion}-velocity.jar" }
+artifacts { archives shadowJar; shadow shadowJar }
