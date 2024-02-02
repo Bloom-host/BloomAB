@@ -3,5 +3,6 @@ rootProject.name = 'BloomAB'
 include(
         'common',
         'bukkit',
-        'velocity'
+        'velocity',
+        'waterfall'
 )

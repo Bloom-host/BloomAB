@@ -1,0 +1,5 @@
+name: ${pluginName}
+version: ${pluginVersion}
+description: ${pluginDescription}
+author: Bloom.host
+main: host.bloom.ab.bungeecord.BloomAB
