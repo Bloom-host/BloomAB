@@ -1,0 +1,8 @@
+# This is the configuration file for BloomAB
+# For any questions, please contact us at: discord.gg/bloom
+
+trigger_duration: 120
+max_joins_per_second: 120
+ip_address: disabled
+secret_key: disabled
+block_new_joins: NEW_PLAYERS_ONLY

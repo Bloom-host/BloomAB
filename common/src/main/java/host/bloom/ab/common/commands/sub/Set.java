@@ -46,7 +46,7 @@ public class Set implements SubCommand {
                     return;
                 }
 
-                plugin.getConfig().setTriggerDuration(duration);
+                plugin.getConfig().triggerDuration = duration;
                 try {
                     plugin.getConfig().save();
                 } catch (IOException exception) {
@@ -74,7 +74,7 @@ public class Set implements SubCommand {
                     return; // domanda ma se hai tolto il get
                 }
 
-                plugin.getConfig().setMaxJoinsPerSecond(maxJps);
+                plugin.getConfig().maxJoinsPerSecond = maxJps;
                 try {
                     plugin.getConfig().save();
                 } catch (IOException exception) {

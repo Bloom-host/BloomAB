@@ -38,14 +38,13 @@ subprojects {
 
     repositories {
         mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        maven { url "https://jitpack.io" }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://maven.geri.dev/releases' }
     }
 
-    dependencies {
-        implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.16.1'
-    }
-
+    // Use repackaged SnakeYAML for configs
+    dependencies { implementation 'dev.geri:Konfig:1.6' }
 }
 
 // Task to gather all shadowJars after building

@@ -1,90 +1,76 @@
 package host.bloom.ab.common.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
+import dev.geri.konfig.Konfig;
+import dev.geri.konfig.util.InvalidConfigurationException;
+import host.bloom.ab.common.AbstractPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 public final class Config {
 
     public static final String FILE_NAME = "config.yml";
+    private transient final Konfig konfig;
 
-    private transient String path;
-    private final int triggerDuration;
-    private final int maxJoinsPerSecond;
-    private final String ipAddress;
-    private final String secretKey;
-    private final BlockNewJoins blockNewJoins;
+    public int triggerDuration;
+    public int maxJoinsPerSecond;
+    public String ipAddress;
+    public String secretKey;
+    public BlockNewJoins blockNewJoins;
 
-    public Config(int triggerDuration, int maxJoinsPerSecond, String ipAddress, String secretKey, BlockNewJoins blockNewJoins) {
-        this.triggerDuration = triggerDuration;
-        this.maxJoinsPerSecond = maxJoinsPerSecond;
-        this.ipAddress = ipAddress;
-        this.secretKey = secretKey;
-        this.blockNewJoins = blockNewJoins;
+    public Config(AbstractPlugin plugin, Konfig konfig) {
+        this.konfig = konfig;
+        this.triggerDuration = konfig.getInt("trigger_duration");
+        this.maxJoinsPerSecond = konfig.getInt("max_joins_per_second");
+        this.ipAddress = konfig.getString("ip_address");
+        this.secretKey = konfig.getString("secret_key");
+
+        String blockNewJoinsRaw = konfig.getString("block_new_joins");
+        BlockNewJoins blockNewJoins;
+        try {
+            this.blockNewJoins = BlockNewJoins.valueOf(blockNewJoinsRaw);
+        } catch (IllegalArgumentException exception) {
+            plugin.getLogger().warning("Invalid value " + blockNewJoinsRaw + ", using default!");
+            this.blockNewJoins = BlockNewJoins.NEW_PLAYERS_ONLY;
+            try {
+                this.save();
+            } catch (IOException ex) {
+                plugin.getLogger().warning("Unable to save configuration: " + ex.getMessage());
+            }
+        }
     }
 
-    public static Config load(String directory) throws IOException {
+    public void save() throws IOException {
+        konfig.set("trigger_duration", this.triggerDuration);
+        konfig.set("max_joins_per_second", this.maxJoinsPerSecond);
+        konfig.set("ip_address", this.ipAddress);
+        konfig.set("secret_key", this.secretKey);
+        konfig.set("block_new_joins", this.blockNewJoins != null ? this.blockNewJoins.name() : null);
+        this.konfig.options().copyDefaults(true);
+        this.konfig.save();
+    }
+
+    public static Config load(AbstractPlugin plugin, String directory) throws IOException, InvalidConfigurationException {
 
         // If the config does not exist, we will create it
         String path = directory + File.separator + FILE_NAME;
         File file = new File(path);
         if (!file.exists()) {
-            // We will initialize some default values here
-            Config config = new Config(120, 120, "NotInUse", "NotInUse", BlockNewJoins.NEW_PLAYERS_ONLY);
-
             try {
                 // Create the directory
-                if (!file.mkdirs()) throw new IOException("Unable to create plugin directory!");
+                File parent = file.getParentFile();
+                if (!parent.exists() && !parent.mkdirs()) throw new IOException("Unable to create plugin directory!");
 
-                // Save the config
-                config.save();
+                // Save the default config
+                Files.copy(plugin.getClass().getClassLoader().getResourceAsStream(FILE_NAME), file.toPath());
             } catch (IOException exception) {
                 throw new IOException("Unable to save default config: " + exception.getMessage());
             }
         }
 
         // Load the config
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        mapper.findAndRegisterModules();
-        Config config = mapper.readValue(file, Config.class);
-        config.path = path;
-
-        return config;
+        return new Config(plugin, Konfig.loadConfiguration(file));
     }
 
-    public void save() throws IOException {
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER));
-        mapper.writeValue(new File(this.path), this);
-    }
-
-    public int getTriggerDuration() {
-        return triggerDuration;
-    }
-
-    public int getMaxJoinsPerSecond() {
-        return maxJoinsPerSecond;
-    }
-
-    public String getIpAddress() {
-        return ipAddress;
-    }
-
-    public String getSecretKey() {
-        return secretKey;
-    }
-
-    public BlockNewJoins getBlockNewJoins() {
-        return blockNewJoins;
-    }
-
-    public void setTriggerDuration(int duration) {
-        // Todo (notgeri):
-    }
-
-    public void setMaxJoinsPerSecond(int maxJps) {
-        // Todo (notgeri):
-    }
 }

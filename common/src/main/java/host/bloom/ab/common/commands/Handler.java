@@ -6,7 +6,6 @@ import host.bloom.ab.common.commands.sub.ForceSub;
 import host.bloom.ab.common.commands.sub.Set;
 import host.bloom.ab.common.config.BlockNewJoins;
 
-import java.util.Collections;
 import java.util.HashMap;
 
 public class Handler {
@@ -85,9 +84,9 @@ public class Handler {
         sender.sendMessage("=========");
         sender.sendMessage("Connections stats");
         sender.sendMessage("=========");
-        int maxRPS = plugin.getConfig().getMaxJoinsPerSecond();
-        int triggerDuration = plugin.getConfig().getTriggerDuration();
-        BlockNewJoins block_new_joins = plugin.getConfig().getBlockNewJoins(); //thanks <3
+        int maxRPS = plugin.getConfig().maxJoinsPerSecond;
+        int triggerDuration = plugin.getConfig().triggerDuration;
+        BlockNewJoins block_new_joins = plugin.getConfig().blockNewJoins;
         sender.sendMessage("Trigger joins Per Second: " + maxRPS + "rps");
         sender.sendMessage("Trigger Duration: " + triggerDuration + " seconds");
         sender.sendMessage("Block New Joins: " + block_new_joins);

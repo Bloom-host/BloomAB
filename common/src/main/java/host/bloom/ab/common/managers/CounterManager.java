@@ -47,9 +47,9 @@ public class CounterManager {
 
                 String data;
                 if (isStop) {
-                    data = "STOP=1&ip_address=" + config.getIpAddress() + "&secret_key=" + config.getSecretKey();
+                    data = "STOP=1&ip_address=" + config.ipAddress + "&secret_key=" + config.secretKey;
                 } else {
-                    data = "triggerTime=" + this.forcedTriggerDuration + "&ip_address=" + config.getIpAddress() + "&block_new_joins=" + config.getBlockNewJoins() + "&secret_key=" + config.getSecretKey() + "&maxrps=" + config.getMaxJoinsPerSecond();
+                    data = "triggerTime=" + this.forcedTriggerDuration + "&ip_address=" + config.ipAddress + "&block_new_joins=" + config.blockNewJoins + "&secret_key=" + config.secretKey + "&maxrps=" + config.maxJoinsPerSecond;
                 }
 
                 try (DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {
@@ -92,7 +92,7 @@ public class CounterManager {
     public CompletableFuture<Void> setForceTrigger(boolean forceTrigger, int seconds) {
         CompletableFuture<Void> exceptionFuture = new CompletableFuture<>();
 
-        if ("<yourserverip>".equals(config.getIpAddress()) || "<yourkey>".equals(config.getSecretKey())) {
+        if ("<yourserverip>".equals(config.ipAddress) || "<yourkey>".equals(config.secretKey)) {
             exceptionFuture.completeExceptionally(new Exception("Plugin configuration is not configured! Please update the 'ip_address' and 'secret_key' values in the config file."));
             return exceptionFuture;
         }
@@ -103,7 +103,7 @@ public class CounterManager {
         }
 
         this.lastTriggerTime = System.currentTimeMillis() / 1000;
-        this.forcedTriggerDuration = seconds == 0 ? config.getTriggerDuration() : seconds;
+        this.forcedTriggerDuration = seconds == 0 ? config.triggerDuration : seconds;
 
         return makeHttpRequest(!forceTrigger).thenCompose(response -> {
             if (!response) {
@@ -138,11 +138,11 @@ public class CounterManager {
         int currentCount = connectionCounts.getOrDefault(currentTime, 0);
         connectionCounts.put(currentTime, currentCount + 1);
 
-        if ((currentCount + 1 > config.getMaxJoinsPerSecond() || forceTrigger) && (currentTime - lastTriggerTime) > 1 && !activated) {
+        if ((currentCount + 1 > config.maxJoinsPerSecond || forceTrigger) && (currentTime - lastTriggerTime) > 1 && !activated) {
             lastTriggerTime = currentTime;
             activated = true;
             plugin.getLogger().severe("Limit reached! Trigger enabled. JPS: " + (currentCount + 1));
-            setForceTrigger(true, config.getTriggerDuration()).exceptionally(ex -> {
+            setForceTrigger(true, config.triggerDuration).exceptionally(ex -> {
                 ex.printStackTrace();
                 return null;
             });

@@ -1,6 +1,8 @@
 package host.bloom.ab.waterfall;
 
+import dev.geri.konfig.util.InvalidConfigurationException;
 import host.bloom.ab.common.AbstractPlugin;
+import host.bloom.ab.common.config.BlockNewJoins;
 import host.bloom.ab.common.config.Config;
 import host.bloom.ab.common.managers.CounterManager;
 import host.bloom.ab.common.utils.Scheduler;
@@ -20,8 +22,8 @@ public class WaterfallPlugin extends Plugin implements AbstractPlugin {
     public void onEnable() {
         // Load the config
         try {
-            this.config = Config.load(this.getDataFolder().getAbsolutePath());
-        } catch (IOException exception) {
+            this.config = Config.load(this, this.getDataFolder().getAbsolutePath());
+        } catch (IOException | InvalidConfigurationException exception) {
             this.getLogger().severe("Unable to load config, shutting down: " + exception.getMessage());
             return;
         }
