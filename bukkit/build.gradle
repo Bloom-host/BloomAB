@@ -1,0 +1,34 @@
+// Use ShadowJAR to build the JAR
+plugins { id 'com.github.johnrengelman.shadow' version '8.1.1' }
+
+// Include the Spigot repository
+repositories {
+    maven {
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+        content {includeGroup 'org.bukkit'; includeGroup 'org.spigotmc' }
+    }
+}
+
+dependencies {
+    // Include the common
+    implementation project(':common')
+
+    // We only need the Spigot API at compile time
+    compileOnly 'org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT'
+}
+
+// Change the plugin.yml based on the project settings
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        expand(
+                'pluginName': project.pluginName,
+                'pluginVersion': project.pluginVersion,
+                'pluginDescription': project.pluginDescription
+        )
+        include 'plugin.yml'
+    }
+}
+
+// Create the JAR
+shadowJar { archiveFileName = "${project.pluginName}-${project.pluginVersion}-bukkit.jar" }
+artifacts { archives shadowJar; shadow shadowJar }
