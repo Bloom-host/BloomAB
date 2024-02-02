@@ -1,6 +1,0 @@
-# Configuration file BloomAB
-trigger_duration: 60 # max 3600, default: 60
-max_joins_per_second: 30 #theshold for the activation of the trigger, default: 30
-ip_address: NotInUse #Used for special cases, default: NotInUse
-secret_key: NotInUse #Used for special cases, default: NotInUse
-block_new_joins: NewPlayersOnly # Enabled/Disabled/NewPlayersOnly, default: NewPlayersOnly
