@@ -1,5 +1,3 @@
-rootProject.name = 'BloomAB'
-
 include(
         'common',
         'waterfall',

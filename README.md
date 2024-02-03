@@ -4,4 +4,4 @@ This is a beta plugin for Java Minecraft proxies that interacts with Bloom Host'
 
 Please report any issues in our support Discord at https://discord.gg/bloom
 
-build with `gradle buildAndCopy`
+build with `gradle uberJar` and fine the final JAR in `build/libs/`

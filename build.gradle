@@ -1,32 +1,27 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    // Use ShadowJAR to build the JARs
+    id 'java'
+    // Use ShadowJAR to build the JAR
     id 'com.github.johnrengelman.shadow' version '8.1.1'
     // Use Blossom to replace tokens
     id 'net.kyori.blossom' version '1.3.0'
 }
 
 ext {
-    output = 'build/'
+    pluginName = 'BloomAB'
+    pluginVersion = '1.3'
+    pluginDescription = 'description here'
+    pluginAuthor = 'Bloom'
+    pluginWebsite = 'https://bloom.host'
 }
 
-
 subprojects {
-    // Apply these plugins for each submodule
     apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'java-library'
     apply plugin: 'com.github.johnrengelman.shadow'
     apply plugin: 'net.kyori.blossom'
-
-    ext {
-        pluginName = 'BloomAB'
-        pluginVersion = '1.3'
-        pluginDescription = 'description here'
-        pluginAuthor = 'Bloom'
-        pluginWebsite = 'https://bloom.host'
-    }
 
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
@@ -47,21 +42,17 @@ subprojects {
     dependencies { implementation 'dev.geri:Konfig:1.6' }
 }
 
-// Task to gather all shadowJars after building
-task buildAndCopy {
-    dependsOn subprojects.collect { it.tasks.withType(ShadowJar) }
-    doLast {
-        subprojects.each { subproject ->
-            if (subproject.name == 'common') return
-            subproject.tasks.withType(ShadowJar).each { shadowJarTask ->
-                copy {
-                    from shadowJarTask.archiveFile
-                    into project.output
-                    rename { String fileName ->
-                        fileName.replace('-all', '')
-                    }
-                }
-            }
-        }
+// Task to create a single 'fat' JAR including all subprojects
+task uberJar(type: ShadowJar) {
+    // Set the output file name and location
+    archiveFileName = "${project.ext.pluginName}-${project.ext.pluginVersion}.jar"
+
+    // Include all subprojects' source sets and dependencies
+    subprojects.each { subproject ->
+        from subproject.sourceSets.main.output
+        configurations = [subproject.configurations.runtimeClasspath]
     }
 }
+
+// Make sure the uberJar task is executed after all subprojects are built
+tasks.uberJar.dependsOn subprojects*.tasks*.build
