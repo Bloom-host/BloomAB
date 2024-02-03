@@ -5,11 +5,11 @@ import host.bloom.ab.common.commands.Sender;
 import host.bloom.ab.common.commands.SubCommand;
 import host.bloom.ab.common.utils.Utils;
 
-public class ForceSub implements SubCommand {
+public class Force implements SubCommand {
 
     private final AbstractPlugin plugin;
 
-    public ForceSub(AbstractPlugin plugin) {
+    public Force(AbstractPlugin plugin) {
         this.plugin = plugin;
     }
 

@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
 
 public class WaterfallPipelineInjector extends ChannelInitializer<Channel> {
 
-    private final CounterManager counterManager;
+    private final CounterManager manager;
     private final ChannelInitializer<Channel> oldChildHandler = PipelineUtils.SERVER_CHILD;
     private static final long SERVER_CHILD_OFFSET;
     private static final Method initChannel;
@@ -29,14 +29,14 @@ public class WaterfallPipelineInjector extends ChannelInitializer<Channel> {
         }
     }
 
-    public WaterfallPipelineInjector(CounterManager counterManager) {
-        this.counterManager = counterManager;
+    public WaterfallPipelineInjector(CounterManager manager) {
+        this.manager = manager;
         UnsafeAccess.UNSAFE.putOrderedObject(PipelineUtils.class, SERVER_CHILD_OFFSET, this);
     }
 
     @Override
     protected void initChannel(Channel channel) {
-        counterManager.incrementConnectionCount();
+        manager.incrementConnectionCount();
         if (oldChildHandler != null) invoke(oldChildHandler, initChannel, channel);
     }
 

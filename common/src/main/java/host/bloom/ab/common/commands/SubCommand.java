@@ -1,5 +1,7 @@
 package host.bloom.ab.common.commands;
 
+import java.util.Collections;
+
 public interface SubCommand {
 
     String getPermission();
@@ -7,7 +9,7 @@ public interface SubCommand {
     void run(Sender sender, String[] args);
 
     default Iterable<String> getTabCompletion(String[] args) {
-        return null;
+        return Collections.emptyList();
     }
 
 }

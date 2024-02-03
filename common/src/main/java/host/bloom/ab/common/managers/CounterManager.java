@@ -77,7 +77,6 @@ public class CounterManager {
         });
     }
 
-
     public void retryStopTrigger() {
         plugin.getScheduler().schedule(() -> makeHttpRequest(true).thenAccept(success -> {
             if (!success) {

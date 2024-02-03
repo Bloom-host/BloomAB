@@ -2,7 +2,6 @@ package host.bloom.ab.waterfall;
 
 import dev.geri.konfig.util.InvalidConfigurationException;
 import host.bloom.ab.common.AbstractPlugin;
-import host.bloom.ab.common.config.BlockNewJoins;
 import host.bloom.ab.common.config.Config;
 import host.bloom.ab.common.managers.CounterManager;
 import host.bloom.ab.common.utils.Scheduler;
@@ -15,7 +14,7 @@ import java.util.logging.Logger;
 public class WaterfallPlugin extends Plugin implements AbstractPlugin {
 
     private Config config;
-    private CounterManager counterManager;
+    private CounterManager manager;
     private Scheduler scheduler;
 
     @Override
@@ -32,18 +31,18 @@ public class WaterfallPlugin extends Plugin implements AbstractPlugin {
         UpdateChecker.handle(this);
 
         // Initialize the manager
-        this.counterManager = new CounterManager(this);
+        this.manager = new CounterManager(this);
 
         // Initialize the commands
         getProxy().getPluginManager().registerCommand(this, new WaterfallCommandHandler(this));
 
         // Load the pipeline injector
-        new WaterfallPipelineInjector(counterManager);
+        new WaterfallPipelineInjector(manager);
     }
 
     @Override
     public CounterManager getManager() {
-        return this.counterManager;
+        return this.manager;
     }
 
     @Override

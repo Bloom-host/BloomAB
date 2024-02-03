@@ -97,7 +97,7 @@ public class Set implements SubCommand {
         if (args.length == 3) {
             return Collections.singletonList("<number>");
         }
-        return null;
+        return Collections.emptyList();
     }
 
 }

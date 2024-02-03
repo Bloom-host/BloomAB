@@ -33,7 +33,7 @@ public class ForceStop implements SubCommand {
     @Override
     public Iterable<String> getTabCompletion(String[] args) {
         if (args.length == 2) return Collections.singletonList("<seconds>");
-        return null;
+        return Collections.emptyList();
     }
 
 }

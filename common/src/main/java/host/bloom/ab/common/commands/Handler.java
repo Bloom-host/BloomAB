@@ -2,10 +2,11 @@ package host.bloom.ab.common.commands;
 
 import host.bloom.ab.common.AbstractPlugin;
 import host.bloom.ab.common.commands.sub.ForceStop;
-import host.bloom.ab.common.commands.sub.ForceSub;
+import host.bloom.ab.common.commands.sub.Force;
 import host.bloom.ab.common.commands.sub.Set;
 import host.bloom.ab.common.config.BlockNewJoins;
 
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Handler {
@@ -16,7 +17,7 @@ public class Handler {
     public Handler(AbstractPlugin plugin) {
         this.plugin = plugin;
         commands.put("forcestop", new ForceStop(plugin));
-        commands.put("force", new ForceSub(plugin));
+        commands.put("force", new Force(plugin));
         commands.put("set", new Set(plugin));
     }
 
@@ -61,14 +62,14 @@ public class Handler {
 
 
     public Iterable<String> onTabComplete(Sender sender, String[] args) {
-        if (!sender.hasPermission("bab.admin")) return null;
+        if (!sender.hasPermission("bab.admin")) return Collections.emptyList();
 
         // Return the subcommands
         if (args.length <= 1) return commands.keySet();
 
         // See if it's a command
         SubCommand command = commands.get(args[0].toLowerCase());
-        if (command == null) return null;
+        if (command == null) return Collections.emptyList();
 
         return command.getTabCompletion(args);
     }
