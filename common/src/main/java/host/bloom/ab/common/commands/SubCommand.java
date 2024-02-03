@@ -1,6 +1,7 @@
 package host.bloom.ab.common.commands;
 
 import java.util.Collections;
+import java.util.List;
 
 public interface SubCommand {
 
@@ -8,7 +9,7 @@ public interface SubCommand {
 
     void run(Sender sender, String[] args);
 
-    default Iterable<String> getTabCompletion(String[] args) {
+    default List<String> getTabCompletion(String[] args) {
         return Collections.emptyList();
     }
 

@@ -7,6 +7,7 @@ import host.bloom.ab.common.utils.Utils;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 public class Set implements SubCommand {
 
@@ -46,9 +47,9 @@ public class Set implements SubCommand {
                     return;
                 }
 
-                plugin.getConfig().triggerDuration = duration;
+                plugin.getABConfig().triggerDuration = duration;
                 try {
-                    plugin.getConfig().save();
+                    plugin.getABConfig().save();
                 } catch (IOException exception) {
                     sender.sendMessage("§cUnable to save config: " + exception.getMessage());
                 }
@@ -74,9 +75,9 @@ public class Set implements SubCommand {
                     return; // domanda ma se hai tolto il get
                 }
 
-                plugin.getConfig().maxJoinsPerSecond = maxJps;
+                plugin.getABConfig().maxJoinsPerSecond = maxJps;
                 try {
-                    plugin.getConfig().save();
+                    plugin.getABConfig().save();
                 } catch (IOException exception) {
                     sender.sendMessage("§cUnable to save config: " + exception.getMessage());
                 }
@@ -89,7 +90,7 @@ public class Set implements SubCommand {
     }
 
     @Override
-    public Iterable<String> getTabCompletion(String[] args) {
+    public List<String> getTabCompletion(String[] args) {
         if (args.length == 2) {
             return Collections.singletonList("<maxjps|duration>");
         }

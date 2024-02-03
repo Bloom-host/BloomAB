@@ -5,7 +5,6 @@ import com.velocitypowered.api.command.SimpleCommand;
 import host.bloom.ab.common.commands.Handler;
 
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 public class VelocityCommandHandler implements SimpleCommand {
 
@@ -28,8 +27,7 @@ public class VelocityCommandHandler implements SimpleCommand {
 
     @Override
     public List<String> suggest(final Invocation invocation) {
-        Iterable<String> results = this.handler.onTabComplete(new VelocitySender(invocation.source()), invocation.arguments());
-        return StreamSupport.stream(results.spliterator(), false).toList();
+        return this.handler.onTabComplete(new VelocitySender(invocation.source()), invocation.arguments());
     }
 
 }

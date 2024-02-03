@@ -1,7 +1,9 @@
 name: ${pluginName}
 version: ${pluginVersion}
 description: ${pluginDescription}
-author: Bloom.host
-website: https://bloom.host
-main: host.bloom.ab.bukkit.BloomAB
+author: ${pluginAuthor}
+website: ${pluginWebsite}
+main: host.bloom.ab.bukkit.BukkitPlugin
 api-version: 1.13
+commands:
+  bloomab: {}

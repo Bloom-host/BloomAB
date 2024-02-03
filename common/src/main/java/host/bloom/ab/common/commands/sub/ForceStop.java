@@ -5,6 +5,7 @@ import host.bloom.ab.common.commands.Sender;
 import host.bloom.ab.common.commands.SubCommand;
 
 import java.util.Collections;
+import java.util.List;
 
 public class ForceStop implements SubCommand {
 
@@ -31,7 +32,7 @@ public class ForceStop implements SubCommand {
     }
 
     @Override
-    public Iterable<String> getTabCompletion(String[] args) {
+    public List<String> getTabCompletion(String[] args) {
         if (args.length == 2) return Collections.singletonList("<seconds>");
         return Collections.emptyList();
     }

@@ -15,7 +15,7 @@ public interface AbstractPlugin {
 
     Logger getABLogger();
 
-    Config getConfig();
+    Config getABConfig();
 
 }
 

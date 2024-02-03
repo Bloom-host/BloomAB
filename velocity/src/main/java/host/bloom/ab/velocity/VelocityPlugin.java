@@ -105,7 +105,7 @@ public class VelocityPlugin implements AbstractPlugin {
     }
 
     @Override
-    public Config getConfig() {
+    public Config getABConfig() {
         return this.config;
     }
 }

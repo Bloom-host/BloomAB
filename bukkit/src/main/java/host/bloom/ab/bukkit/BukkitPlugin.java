@@ -1,4 +1,4 @@
-package host.bloom.ab.waterfall;
+package host.bloom.ab.bukkit;
 
 import dev.geri.konfig.util.InvalidConfigurationException;
 import host.bloom.ab.common.AbstractPlugin;
@@ -7,22 +7,21 @@ import host.bloom.ab.common.managers.CounterManager;
 import host.bloom.ab.common.utils.Logger;
 import host.bloom.ab.common.utils.Scheduler;
 import host.bloom.ab.common.utils.UpdateChecker;
-import net.md_5.bungee.api.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 
-public class WaterfallPlugin extends Plugin implements AbstractPlugin {
+public class BukkitPlugin extends JavaPlugin implements AbstractPlugin {
 
-    private WaterfallLogger logger;
+    private BukkitLogger logger;
     private Config config;
     private CounterManager manager;
-    private Scheduler scheduler;
 
     @Override
     public void onEnable() {
 
         // Initialize the logger
-        this.logger = new WaterfallLogger(super.getLogger());
+        this.logger = new BukkitLogger(super.getLogger());
 
         // Load the config
         try {
@@ -39,10 +38,10 @@ public class WaterfallPlugin extends Plugin implements AbstractPlugin {
         this.manager = new CounterManager(this);
 
         // Initialize the commands
-        getProxy().getPluginManager().registerCommand(this, new WaterfallCommandHandler(this));
+        new BukkitCommandHandler(this);
 
-        // Load the pipeline injector
-        new WaterfallPipelineInjector(manager);
+        // Load the listener
+        this.getServer().getPluginManager().registerEvents(new BukkitLoginListener(this), this);
     }
 
     @Override
@@ -52,13 +51,12 @@ public class WaterfallPlugin extends Plugin implements AbstractPlugin {
 
     @Override
     public Scheduler getScheduler() {
-        if (this.scheduler == null) this.scheduler = new WaterfallScheduler(this);
-        return this.scheduler;
+        return new BukkitScheduler(this);
     }
 
     @Override
     public String getVersion() {
-        return this.getDescription().getVersion();
+        return getDescription().getVersion();
     }
 
     @Override
@@ -70,5 +68,4 @@ public class WaterfallPlugin extends Plugin implements AbstractPlugin {
     public Config getABConfig() {
         return this.config;
     }
-
 }

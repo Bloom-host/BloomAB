@@ -8,6 +8,7 @@ import host.bloom.ab.common.config.BlockNewJoins;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class Handler {
 
@@ -61,11 +62,11 @@ public class Handler {
     }
 
 
-    public Iterable<String> onTabComplete(Sender sender, String[] args) {
+    public List<String> onTabComplete(Sender sender, String[] args) {
         if (!sender.hasPermission("bab.admin")) return Collections.emptyList();
 
         // Return the subcommands
-        if (args.length <= 1) return commands.keySet();
+        if (args.length <= 1) return commands.keySet().stream().toList();
 
         // See if it's a command
         SubCommand command = commands.get(args[0].toLowerCase());
@@ -85,9 +86,9 @@ public class Handler {
         sender.sendMessage("=========");
         sender.sendMessage("Connections stats");
         sender.sendMessage("=========");
-        int maxRPS = plugin.getConfig().maxJoinsPerSecond;
-        int triggerDuration = plugin.getConfig().triggerDuration;
-        BlockNewJoins block_new_joins = plugin.getConfig().blockNewJoins;
+        int maxRPS = plugin.getABConfig().maxJoinsPerSecond;
+        int triggerDuration = plugin.getABConfig().triggerDuration;
+        BlockNewJoins block_new_joins = plugin.getABConfig().blockNewJoins;
         sender.sendMessage("Trigger joins Per Second: " + maxRPS + "rps");
         sender.sendMessage("Trigger Duration: " + triggerDuration + " seconds");
         sender.sendMessage("Block New Joins: " + block_new_joins);

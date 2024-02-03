@@ -19,8 +19,10 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         expand(
                 'pluginName': project.pluginName,
+                'pluginDescription': project.pluginDescription,
                 'pluginVersion': project.pluginVersion,
-                'pluginDescription': project.pluginDescription
+                'pluginAuthor': project.pluginAuthor,
+                'pluginWebsite': project.pluginWebsite
         )
         include 'plugin.yml'
     }

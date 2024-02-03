@@ -25,7 +25,7 @@ public class CounterManager {
 
     public CounterManager(AbstractPlugin plugin) {
         this.plugin = plugin;
-        this.config = plugin.getConfig();
+        this.config = plugin.getABConfig();
 
         // Initialize the schedule
         plugin.getScheduler().schedule(() -> {
