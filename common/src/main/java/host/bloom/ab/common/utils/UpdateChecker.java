@@ -13,6 +13,7 @@ public class UpdateChecker {
 
     private static final String UPDATE_URL = "https://abapi.lowhosting.org/bloom_version/";
     private static final String DOWNLOAD_URL = "https://abapi.lowhosting.org/bloom_downloadUrl/";
+    // Todo (notgeri): https://abapi.lowhosting.org/bloom_velocity_version/
 
     public static void handle(AbstractPlugin plugin) {
         plugin.getScheduler().runAsync(() -> {
@@ -21,12 +22,12 @@ public class UpdateChecker {
                  Scanner scanner = new Scanner(inputStream)) {
                 if (scanner.hasNext()) newVersion = scanner.next();
             } catch (IOException exception) {
-                plugin.getLogger().info("Cannot look for updates: " + exception.getMessage());
+                plugin.getABLogger().info("Cannot look for updates: " + exception.getMessage());
                 return;
             }
 
             if (newVersion == null || plugin.getVersion().equalsIgnoreCase(newVersion)) {
-                plugin.getLogger().info("There isn't a newer version available!");
+                plugin.getABLogger().info("There isn't a newer version available!");
                 return;
             }
 
@@ -39,12 +40,12 @@ public class UpdateChecker {
 
                 // Checking if downloadUrl is not null before logging the message
                 if (downloadUrl != null) {
-                    plugin.getLogger().info("There is a new update available. Please download it at: " + downloadUrl);
+                    plugin.getABLogger().info("There is a new update available. Please download it at: " + downloadUrl);
                 } else {
-                    plugin.getLogger().severe("Download URL is null. Please check the source.");
+                    plugin.getABLogger().error("Download URL is null. Please check the source.");
                 }
             } catch (IOException e) {
-                plugin.getLogger().severe("An error occurred while fetching the download URL: " + e.getMessage());
+                plugin.getABLogger().error("An error occurred while fetching the download URL: " + e.getMessage());
             }
         });
     }

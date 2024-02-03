@@ -2,10 +2,8 @@ package host.bloom.ab.common;
 
 import host.bloom.ab.common.config.Config;
 import host.bloom.ab.common.managers.CounterManager;
+import host.bloom.ab.common.utils.Logger;
 import host.bloom.ab.common.utils.Scheduler;
-
-import java.net.URL;
-import java.util.logging.Logger;
 
 public interface AbstractPlugin {
 
@@ -15,8 +13,9 @@ public interface AbstractPlugin {
 
     String getVersion();
 
-    Logger getLogger();
+    Logger getABLogger();
 
     Config getConfig();
+
 }
 

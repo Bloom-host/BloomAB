@@ -60,10 +60,10 @@ public class CounterManager {
                 int responseCode = conn.getResponseCode();
 
                 if (responseCode == 200) {
-                    plugin.getLogger().info("Remote call successful: trigger " + (isStop ? "stopped." : "enabled."));
+                    plugin.getABLogger().info("Remote call successful: trigger " + (isStop ? "stopped." : "enabled."));
                     return true;
                 } else {
-                    plugin.getLogger().severe("Remote call failed (HTTP Error " + responseCode + "), trigger " + (isStop ? "stop" : "start") + " canceled.");
+                    plugin.getABLogger().error("Remote call failed (HTTP Error " + responseCode + "), trigger " + (isStop ? "stop" : "start") + " canceled.");
                     return false;
                 }
             } catch (IOException e) {
@@ -80,10 +80,10 @@ public class CounterManager {
     public void retryStopTrigger() {
         plugin.getScheduler().schedule(() -> makeHttpRequest(true).thenAccept(success -> {
             if (!success) {
-                plugin.getLogger().info("Retry to stop the trigger failed, retrying in 1 minute.");
+                plugin.getABLogger().info("Retry to stop the trigger failed, retrying in 1 minute.");
                 retryStopTrigger();
             } else {
-                plugin.getLogger().info("Retry to stop the trigger succeeded.");
+                plugin.getABLogger().info("Retry to stop the trigger succeeded.");
             }
         }), 1, TimeUnit.MINUTES);
     }
@@ -119,10 +119,10 @@ public class CounterManager {
                     this.forceTrigger = false;
                     makeHttpRequest(true).thenAccept(success -> { // make HTTP request when stopping the trigger
                         if (!success) {
-                            plugin.getLogger().info("Failed to stop the trigger, scheduling retries.");
+                            plugin.getABLogger().info("Failed to stop the trigger, scheduling retries.");
                             retryStopTrigger();
                         } else {
-                            plugin.getLogger().info("Force trigger has been deactivated.");
+                            plugin.getABLogger().info("Force trigger has been deactivated.");
                             activated = false;
                         }
                     });
@@ -140,7 +140,7 @@ public class CounterManager {
         if ((currentCount + 1 > config.maxJoinsPerSecond || forceTrigger) && (currentTime - lastTriggerTime) > 1 && !activated) {
             lastTriggerTime = currentTime;
             activated = true;
-            plugin.getLogger().severe("Limit reached! Trigger enabled. JPS: " + (currentCount + 1));
+            plugin.getABLogger().error("Limit reached! Trigger enabled. JPS: " + (currentCount + 1));
             setForceTrigger(true, config.triggerDuration).exceptionally(ex -> {
                 ex.printStackTrace();
                 return null;
@@ -162,7 +162,7 @@ public class CounterManager {
         if (forceTrigger) {
             long currentTime = System.currentTimeMillis() / 1000;
             int currentCount = connectionCounts.getOrDefault(currentTime, 0);
-            plugin.getLogger().info("Number of received JPS: " + currentCount);
+            plugin.getABLogger().info("Number of received JPS: " + currentCount);
         }
     }
 

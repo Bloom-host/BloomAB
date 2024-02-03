@@ -1,18 +1,16 @@
-// Include the Velocity repository
-repositories { maven { url 'https://repo.papermc.io/repository/maven-public/' } }
-
 dependencies {
     // Include the common
     implementation project(':common')
 
-    // Velocity is used at compile and annotation processing times
-    compileOnly 'com.velocitypowered:velocity-api:3.0.0'
-    annotationProcessor 'com.velocitypowered:velocity-api:3.0.0'
+    // We use some Velocity internals, so we have to use the JAR
+    def velocityJar = files('libs/velocity-3.3.0-SNAPSHOT-346.jar')
+    compileOnly velocityJar
+    annotationProcessor velocityJar
 }
 
 // Change the BloomAB.java details based on the project settings
 blossom {
-    replaceTokenIn('src/main/java/host/bloom/ab/velocity/BloomAB.java')
+    replaceTokenIn('src/main/java/host/bloom/ab/velocity/VelocityPlugin.java')
     replaceToken '@name@', project.pluginName
     replaceToken '@id@', project.pluginName.toLowerCase()
     replaceToken '@version@', project.pluginVersion

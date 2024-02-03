@@ -4,26 +4,31 @@ import dev.geri.konfig.util.InvalidConfigurationException;
 import host.bloom.ab.common.AbstractPlugin;
 import host.bloom.ab.common.config.Config;
 import host.bloom.ab.common.managers.CounterManager;
+import host.bloom.ab.common.utils.Logger;
 import host.bloom.ab.common.utils.Scheduler;
 import host.bloom.ab.common.utils.UpdateChecker;
 import net.md_5.bungee.api.plugin.Plugin;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 public class WaterfallPlugin extends Plugin implements AbstractPlugin {
 
+    private WaterfallLogger logger;
     private Config config;
     private CounterManager manager;
     private Scheduler scheduler;
 
     @Override
     public void onEnable() {
+
+        // Initialize the logger
+        this.logger = new WaterfallLogger(super.getLogger());
+
         // Load the config
         try {
             this.config = Config.load(this, this.getDataFolder().getAbsolutePath());
         } catch (IOException | InvalidConfigurationException exception) {
-            this.getLogger().severe("Unable to load config, shutting down: " + exception.getMessage());
+            this.getABLogger().error("Unable to load config, shutting down: " + exception.getMessage());
             return;
         }
 
@@ -57,8 +62,8 @@ public class WaterfallPlugin extends Plugin implements AbstractPlugin {
     }
 
     @Override
-    public Logger getLogger() {
-        return super.getLogger();
+    public Logger getABLogger() {
+        return this.logger;
     }
 
     @Override

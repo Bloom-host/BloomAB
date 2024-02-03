@@ -18,6 +18,7 @@ public final class Config {
     public String ipAddress;
     public String secretKey;
     public BlockNewJoins blockNewJoins;
+    public boolean catchRawConnections;
 
     public Config(AbstractPlugin plugin, Konfig konfig) {
         this.konfig = konfig;
@@ -25,18 +26,18 @@ public final class Config {
         this.maxJoinsPerSecond = konfig.getInt("max_joins_per_second");
         this.ipAddress = konfig.getString("ip_address");
         this.secretKey = konfig.getString("secret_key");
+        this.catchRawConnections = konfig.getBoolean("catch_raw_connection");
 
         String blockNewJoinsRaw = konfig.getString("block_new_joins");
-        BlockNewJoins blockNewJoins;
         try {
             this.blockNewJoins = BlockNewJoins.valueOf(blockNewJoinsRaw);
         } catch (IllegalArgumentException exception) {
-            plugin.getLogger().warning("Invalid value " + blockNewJoinsRaw + ", using default!");
+            plugin.getABLogger().warning("Invalid value " + blockNewJoinsRaw + ", using default!");
             this.blockNewJoins = BlockNewJoins.NEW_PLAYERS_ONLY;
             try {
                 this.save();
             } catch (IOException ex) {
-                plugin.getLogger().warning("Unable to save configuration: " + ex.getMessage());
+                plugin.getABLogger().warning("Unable to save configuration: " + ex.getMessage());
             }
         }
     }
@@ -47,6 +48,7 @@ public final class Config {
         konfig.set("ip_address", this.ipAddress);
         konfig.set("secret_key", this.secretKey);
         konfig.set("block_new_joins", this.blockNewJoins != null ? this.blockNewJoins.name() : null);
+        konfig.set("catch_raw_connections", this.catchRawConnections);
         this.konfig.options().copyDefaults(true);
         this.konfig.save();
     }
