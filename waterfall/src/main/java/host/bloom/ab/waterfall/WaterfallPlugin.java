@@ -20,7 +20,6 @@ public class WaterfallPlugin extends Plugin implements AbstractPlugin {
 
     @Override
     public void onEnable() {
-
         // Initialize the logger
         this.logger = new WaterfallLogger(super.getLogger());
 
@@ -41,8 +40,9 @@ public class WaterfallPlugin extends Plugin implements AbstractPlugin {
         // Initialize the commands
         getProxy().getPluginManager().registerCommand(this, new WaterfallCommandHandler(this));
 
-        // Load the pipeline injector
-        new WaterfallPipelineInjector(manager);
+        // Initialize the login hook channel
+        if (!this.config.catchRawConnections) this.getABLogger().warning("The Waterfall version of the plugin does not support using internal APIs for connections, defaulting to catching raw connections!");
+        new WaterfallLoginHookChannel(manager);
     }
 
     @Override

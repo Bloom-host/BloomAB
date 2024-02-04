@@ -19,7 +19,6 @@ public class BukkitPlugin extends JavaPlugin implements AbstractPlugin {
 
     @Override
     public void onEnable() {
-
         // Initialize the logger
         this.logger = new BukkitLogger(super.getLogger());
 
@@ -41,6 +40,7 @@ public class BukkitPlugin extends JavaPlugin implements AbstractPlugin {
         new BukkitCommandHandler(this);
 
         // Load the listener
+        if (this.config.catchRawConnections) this.getABLogger().warning("The Paper version of the plugin does not support using raw connections, defaulting to using built in APIs!");
         this.getServer().getPluginManager().registerEvents(new BukkitLoginListener(this), this);
     }
 
@@ -68,4 +68,5 @@ public class BukkitPlugin extends JavaPlugin implements AbstractPlugin {
     public Config getABConfig() {
         return this.config;
     }
+
 }

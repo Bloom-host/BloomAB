@@ -10,6 +10,6 @@ api:
   secret: disabled
 
 options:
-  catch-raw-connections: false
+  catch-raw-connections: true
   block-new-joins: NEW_PLAYERS_ONLY
   check-for-updates: true
