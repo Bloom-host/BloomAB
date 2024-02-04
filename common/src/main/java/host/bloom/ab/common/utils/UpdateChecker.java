@@ -1,5 +1,7 @@
 package host.bloom.ab.common.utils;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import host.bloom.ab.common.AbstractPlugin;
 
 import java.io.BufferedReader;
@@ -7,46 +9,44 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class UpdateChecker {
 
-    private static final String UPDATE_URL = "https://abapi.lowhosting.org/bloom_version/";
-    private static final String DOWNLOAD_URL = "https://abapi.lowhosting.org/bloom_downloadUrl/";
-    // Todo (notgeri): https://abapi.lowhosting.org/bloom_velocity_version/
+    private static final Gson gson = new GsonBuilder().create();
 
     public static void handle(AbstractPlugin plugin) {
+        if (!plugin.getABConfig().checkForUpdates) return;
+
         plugin.getScheduler().runAsync(() -> {
-            String newVersion = null;
-            try (InputStream inputStream = new URL(UPDATE_URL).openStream();
-                 Scanner scanner = new Scanner(inputStream)) {
-                if (scanner.hasNext()) newVersion = scanner.next();
+
+            // Get the latest release from GitHub and parse the JSON
+            GitHubRelease release;
+            try (InputStream inputStream = new URL("https://api.github.com/repos/bloom-host/bloomab/releases/latest").openStream()) {
+                release = gson.fromJson(new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n")), GitHubRelease.class);
             } catch (IOException exception) {
-                plugin.getABLogger().info("Cannot look for updates: " + exception.getMessage());
+                plugin.getABLogger().info("Unable to check for new GitHub releases: " + exception.getMessage());
                 return;
             }
 
-            if (newVersion == null || plugin.getVersion().equalsIgnoreCase(newVersion)) {
-                plugin.getABLogger().info("There isn't a newer version available!");
+            // Check if the version has changed
+            if (release.tagName() != null && plugin.getVersion().equalsIgnoreCase(release.tagName())) {
+                plugin.getABLogger().info("You are running the latest version!");
                 return;
             }
 
-            try {
-                URL url = new URL(DOWNLOAD_URL);
-                BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-
-                String downloadUrl = in.readLine();  // read first line
-                in.close();
-
-                // Checking if downloadUrl is not null before logging the message
-                if (downloadUrl != null) {
-                    plugin.getABLogger().info("There is a new update available. Please download it at: " + downloadUrl);
-                } else {
-                    plugin.getABLogger().error("Download URL is null. Please check the source.");
+            // Find the right asset. If there isn't a JAR, we will just
+            // offer the release link itself
+            String downloadLink = release.htmlUrl();
+            for (GitHubRelease.Asset asset : release.assets()) {
+                if (asset.name().contains(".jar")) {
+                    downloadLink = asset.downloadUrl();
+                    break;
                 }
-            } catch (IOException e) {
-                plugin.getABLogger().error("An error occurred while fetching the download URL: " + e.getMessage());
             }
+
+            plugin.getABLogger().info("There is a new update available! Please download it: " + downloadLink);
         });
     }
 }
+

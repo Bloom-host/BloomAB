@@ -6,6 +6,7 @@ import host.bloom.ab.common.AbstractPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 
 public final class Config {
@@ -19,16 +20,18 @@ public final class Config {
     public String secretKey;
     public BlockNewJoins blockNewJoins;
     public boolean catchRawConnections;
+    public boolean checkForUpdates;
 
     public Config(AbstractPlugin plugin, Konfig konfig) {
         this.konfig = konfig;
-        this.triggerDuration = konfig.getInt("trigger_duration");
-        this.maxJoinsPerSecond = konfig.getInt("max_joins_per_second");
-        this.ipAddress = konfig.getString("ip_address");
-        this.secretKey = konfig.getString("secret_key");
-        this.catchRawConnections = konfig.getBoolean("catch_raw_connection");
+        this.triggerDuration = konfig.getInt("limits.trigger-duration");
+        this.maxJoinsPerSecond = konfig.getInt("limits.max-joins-per-second");
+        this.ipAddress = konfig.getString("api.endpoint");
+        this.secretKey = konfig.getString("api.secret");
+        this.catchRawConnections = konfig.getBoolean("options.catch-raw-connections");
+        this.checkForUpdates = konfig.getBoolean("options.check-for-updates");
 
-        String blockNewJoinsRaw = konfig.getString("block_new_joins");
+        String blockNewJoinsRaw = konfig.getString("options.block-new-joins");
         try {
             this.blockNewJoins = BlockNewJoins.valueOf(blockNewJoinsRaw);
         } catch (IllegalArgumentException exception) {
@@ -43,12 +46,14 @@ public final class Config {
     }
 
     public void save() throws IOException {
-        konfig.set("trigger_duration", this.triggerDuration);
-        konfig.set("max_joins_per_second", this.maxJoinsPerSecond);
-        konfig.set("ip_address", this.ipAddress);
-        konfig.set("secret_key", this.secretKey);
-        konfig.set("block_new_joins", this.blockNewJoins != null ? this.blockNewJoins.name() : null);
-        konfig.set("catch_raw_connections", this.catchRawConnections);
+        konfig.set("limits.trigger-duration", this.triggerDuration);
+        konfig.set("limits.max-joins-per-second", this.maxJoinsPerSecond);
+        konfig.set("api.endpoint", this.ipAddress);
+        konfig.set("api.secret", this.secretKey);
+        konfig.set("options.catch-raw-connections", this.catchRawConnections);
+        konfig.set("options.check-for-updates", this.checkForUpdates);
+        konfig.set("options.block-new-joins", this.blockNewJoins != null ? this.blockNewJoins.name() : null);
+
         this.konfig.options().copyDefaults(true);
         this.konfig.save();
     }
@@ -65,8 +70,11 @@ public final class Config {
                 if (!parent.exists() && !parent.mkdirs()) throw new IOException("Unable to create plugin directory!");
 
                 // Save the default config
-                Files.copy(plugin.getClass().getClassLoader().getResourceAsStream(FILE_NAME), file.toPath());
-            } catch (IOException exception) {
+                try (InputStream resource = plugin.getClass().getClassLoader().getResourceAsStream(FILE_NAME)) {
+                    if (resource == null) throw new IOException("unable to find config in JAR!");
+                    Files.copy(resource, file.toPath());
+                }
+            } catch (IOException  exception) {
                 throw new IOException("Unable to save default config: " + exception.getMessage());
             }
         }
