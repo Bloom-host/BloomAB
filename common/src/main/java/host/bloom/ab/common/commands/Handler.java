@@ -1,10 +1,9 @@
 package host.bloom.ab.common.commands;
 
 import host.bloom.ab.common.AbstractPlugin;
-import host.bloom.ab.common.commands.sub.ForceStop;
 import host.bloom.ab.common.commands.sub.Force;
+import host.bloom.ab.common.commands.sub.ForceStop;
 import host.bloom.ab.common.commands.sub.Set;
-import host.bloom.ab.common.config.BlockNewJoins;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -56,8 +55,8 @@ public class Handler {
 
         try {
             subCommand.run(sender, strings);
-        } catch (Exception e) {
-            sender.sendMessage("Failed to execute command: " + e.getMessage());
+        } catch (Exception exception) {
+            sender.sendMessage("Failed to execute command: " + exception.getMessage());
         }
     }
 
@@ -76,30 +75,38 @@ public class Handler {
     }
 
     private void sendHelpMessage(Sender sender) {
-        sender.sendMessage("=========");
-        sender.sendMessage("BloomAB Commands");
-        sender.sendMessage("=========");
-        sender.sendMessage("/bab force <seconds>: Enable force trigger for <seconds> seconds.");
-        sender.sendMessage("/bab forcestop: Force stop the trigger and keep it disabled until the finish of the attack.");
-        sender.sendMessage("/bab set maxjps <number>: Set max joins per second.");
-        sender.sendMessage("/bab set duration <seconds>: Set trigger duration.");
-        sender.sendMessage("=========");
-        sender.sendMessage("Connections stats");
-        sender.sendMessage("=========");
-        int maxRPS = plugin.getABConfig().maxJoinsPerSecond;
-        int triggerDuration = plugin.getABConfig().triggerDuration;
-        BlockNewJoins block_new_joins = plugin.getABConfig().blockNewJoins;
-        sender.sendMessage("Trigger joins Per Second: " + maxRPS + "rps");
-        sender.sendMessage("Trigger Duration: " + triggerDuration + " seconds");
-        sender.sendMessage("Block New Joins: " + block_new_joins);
+        String triggerStatus;
         if (plugin.getManager().isForceTrigger()) {
             long remainingSeconds = plugin.getManager().getRemainingSeconds();
-            sender.sendMessage("Trigger is enabled. It will be deactivated in " + remainingSeconds + " seconds.");
+            triggerStatus = "§cTrigger is enabled. It will be deactivated in §4" + remainingSeconds + "§c seconds.";
         } else {
-            sender.sendMessage("Trigger is not currently enabled.");
+            triggerStatus = "§aTrigger is not currently enabled.";
         }
 
-        sender.sendMessage("Current joins per second: " + plugin.getManager().getCurrentCount(System.currentTimeMillis() / 1000));
+        sender.sendMessage("""
+                §8§m                                                          §r
+                §6§lBLOOMAB COMMANDS§r:
+                §e/bab force §6<seconds>§r: §7Enable force trigger for X seconds
+                §e/bab forcestop§r: §7Force stop the trigger and keep it disabled until the finish of the attack
+                §e/bab set maxjps §6<number>§r: §7Set max joins per second
+                §e/bab set duration §6<seconds>§r: §7Set trigger duration
+                §r
+                §6§lCONNECTION STATS§r:
+                §7• §eTrigger joins per second: §6%s rps
+                §7• §eTrigger duration: §6%s seconds
+                §7• §eBlock new joins: §6%s
+                §7• §eCurrent joins per second: §6%s
+                §7• %s
+                §8§m                                                          §r
+                """
+                .formatted(
+                        plugin.getABConfig().maxJoinsPerSecond,
+                        plugin.getABConfig().triggerDuration,
+                        plugin.getABConfig().blockNewJoins,
+                        plugin.getManager().getCurrentCount(System.currentTimeMillis() / 1000),
+                        triggerStatus
+                )
+        );
 
     }
 }

@@ -27,7 +27,7 @@ public class CounterManager {
         this.plugin = plugin;
         this.config = plugin.getABConfig();
 
-        // Initialize the schedule
+        // Initialize the schedule to track connections
         plugin.getScheduler().schedule(() -> {
             resetConnectionCounts();
             logCurrentCount();
@@ -36,10 +36,10 @@ public class CounterManager {
 
     private CompletableFuture<Boolean> makeHttpRequest(boolean isStop) {
         return CompletableFuture.supplyAsync(() -> {
+
             HttpURLConnection conn = null;
             try {
-                URL url = new URL("https://abapi.lowhosting.org/");
-                conn = (HttpURLConnection) url.openConnection();
+                conn = (HttpURLConnection) new URL(this.config.location.getEndpoint()).openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 conn.setRequestProperty("User-Agent", "BloomAB");
@@ -58,7 +58,6 @@ public class CounterManager {
                 }
 
                 int responseCode = conn.getResponseCode();
-
                 if (responseCode == 200) {
                     plugin.getABLogger().info("Remote call successful: trigger " + (isStop ? "stopped." : "enabled."));
                     return true;
@@ -66,13 +65,13 @@ public class CounterManager {
                     plugin.getABLogger().error("Remote call failed (HTTP Error " + responseCode + "), trigger " + (isStop ? "stop" : "start") + " canceled.");
                     return false;
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+
+            } catch (IOException exception) {
+                this.plugin.getABLogger().error("Unable to make API call:" + exception.getMessage());
+                exception.printStackTrace();
                 return false;
             } finally {
-                if (conn != null) {
-                    conn.disconnect();
-                }
+                if (conn != null) conn.disconnect();
             }
         });
     }
@@ -90,11 +89,6 @@ public class CounterManager {
 
     public CompletableFuture<Void> setForceTrigger(boolean forceTrigger, int seconds) {
         CompletableFuture<Void> exceptionFuture = new CompletableFuture<>();
-
-        if ("<yourserverip>".equals(config.ipAddress) || "<yourkey>".equals(config.secretKey)) {
-            exceptionFuture.completeExceptionally(new Exception("Plugin configuration is not configured! Please update the 'ip_address' and 'secret_key' values in the config file."));
-            return exceptionFuture;
-        }
 
         if (seconds > 3600) {
             exceptionFuture.completeExceptionally(new Exception("Trigger duration exceeds the maximum allowed value (3600 seconds)."));
@@ -114,6 +108,7 @@ public class CounterManager {
             if (!forceTrigger) {
                 return CompletableFuture.completedFuture(null);
             }
+
             plugin.getScheduler().schedule(() -> {
                 if (this.forceTrigger) {
                     this.forceTrigger = false;

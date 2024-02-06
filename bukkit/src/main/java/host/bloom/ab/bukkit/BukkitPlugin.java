@@ -30,9 +30,6 @@ public class BukkitPlugin extends JavaPlugin implements AbstractPlugin {
             return;
         }
 
-        // Check for new updates in the background
-        UpdateChecker.handle(this);
-
         // Initialize the manager
         this.manager = new CounterManager(this);
 
@@ -40,8 +37,10 @@ public class BukkitPlugin extends JavaPlugin implements AbstractPlugin {
         new BukkitCommandHandler(this);
 
         // Load the listener
-        if (this.config.catchRawConnections) this.getABLogger().warning("The Paper version of the plugin does not support using raw connections, defaulting to using built in APIs!");
         this.getServer().getPluginManager().registerEvents(new BukkitLoginListener(this), this);
+
+        // Handle other tasks
+        this.afterStartup();
     }
 
     @Override
@@ -67,6 +66,11 @@ public class BukkitPlugin extends JavaPlugin implements AbstractPlugin {
     @Override
     public Config getABConfig() {
         return this.config;
+    }
+
+    @Override
+    public Platform getPlatform() {
+        return Platform.BUKKIT;
     }
 
 }

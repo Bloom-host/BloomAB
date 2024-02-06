@@ -19,6 +19,7 @@ public final class Config {
     public String ipAddress;
     public String secretKey;
     public BlockNewJoins blockNewJoins;
+    public Location location;
     public boolean catchRawConnections;
     public boolean checkForUpdates;
 
@@ -31,16 +32,31 @@ public final class Config {
         this.catchRawConnections = konfig.getBoolean("options.catch-raw-connections");
         this.checkForUpdates = konfig.getBoolean("options.check-for-updates");
 
+        boolean save = false;
+
+        String locationRaw = konfig.getString("options.location");
+        try {
+            this.location = Location.valueOf(locationRaw);
+        } catch (IllegalArgumentException | NullPointerException exception) {
+            plugin.getABLogger().warning("Invalid location " + locationRaw + ", using default!");
+            this.location = Location.ASHBURN;
+            save = true;
+        }
+
         String blockNewJoinsRaw = konfig.getString("options.block-new-joins");
         try {
             this.blockNewJoins = BlockNewJoins.valueOf(blockNewJoinsRaw);
-        } catch (IllegalArgumentException exception) {
+        } catch (IllegalArgumentException | NullPointerException exception) {
             plugin.getABLogger().warning("Invalid value " + blockNewJoinsRaw + ", using default!");
             this.blockNewJoins = BlockNewJoins.NEW_PLAYERS_ONLY;
+            save = true;
+        }
+
+        if (save) {
             try {
                 this.save();
-            } catch (IOException ex) {
-                plugin.getABLogger().warning("Unable to save configuration: " + ex.getMessage());
+            } catch (IOException exception) {
+                plugin.getABLogger().warning("Unable to save fixed configuration: " + exception.getMessage());
             }
         }
     }
@@ -50,6 +66,7 @@ public final class Config {
         konfig.set("limits.max-joins-per-second", this.maxJoinsPerSecond);
         konfig.set("api.endpoint", this.ipAddress);
         konfig.set("api.secret", this.secretKey);
+        konfig.set("options.location", this.location);
         konfig.set("options.catch-raw-connections", this.catchRawConnections);
         konfig.set("options.check-for-updates", this.checkForUpdates);
         konfig.set("options.block-new-joins", this.blockNewJoins != null ? this.blockNewJoins.name() : null);
@@ -74,7 +91,7 @@ public final class Config {
                     if (resource == null) throw new IOException("unable to find config in JAR!");
                     Files.copy(resource, file.toPath());
                 }
-            } catch (IOException  exception) {
+            } catch (IOException exception) {
                 throw new IOException("Unable to save default config: " + exception.getMessage());
             }
         }

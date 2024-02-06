@@ -45,9 +45,6 @@ public class VelocityPlugin implements AbstractPlugin {
             return;
         }
 
-        // Check for new updates in the background
-        UpdateChecker.handle(this);
-
         // Initialize the manager
         this.manager = new CounterManager(this);
 
@@ -69,6 +66,9 @@ public class VelocityPlugin implements AbstractPlugin {
         }
 
         server.getEventManager().register(this, new VelocityLoginListener(this));
+
+        // Handle other tasks
+        this.afterStartup();
     }
 
     @Override
@@ -94,6 +94,11 @@ public class VelocityPlugin implements AbstractPlugin {
     @Override
     public Config getABConfig() {
         return this.config;
+    }
+
+    @Override
+    public Platform getPlatform() {
+        return Platform.VELOCITY;
     }
 
 }

@@ -25,25 +25,25 @@ public class Set implements SubCommand {
     @Override
     public void run(Sender sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage("§cUsage: /bab set duration / maxjps <value>");
+            sender.sendMessage("§cUsage: /bab set <duration/maxjps> <value>");
             return;
         }
 
         switch (args[1]) {
             case "duration":
-                int duration = Integer.parseInt(args[2]);
-
-                if (duration > 3600) {
-                    sender.sendMessage("§cTrigger duration exceeds the maximum allowed value (3600 seconds).");
-                    return;
-                }
                 if (args.length < 3) {
                     sender.sendMessage("§cUsage: /bab set duration <seconds>");
                     return;
                 }
 
-                if (args[2].isEmpty() || args[2].equals("0") || !Utils.isInteger(args[2])) {
+                Integer duration = Utils.getInteger(args[2]);
+                if (duration == null) {
                     sender.sendMessage("§cPlease enter a valid number!");
+                    return;
+                }
+
+                if (duration > 3600) {
+                    sender.sendMessage("§cTrigger duration exceeds the maximum allowed value (3600 seconds).");
                     return;
                 }
 
@@ -58,21 +58,20 @@ public class Set implements SubCommand {
                 break;
 
             case "maxjps":
-                int maxJps = Integer.parseInt(args[2]);
-
-                if (maxJps > 100000) {
-                    sender.sendMessage("§cMax joins Per Second exceeds the maximum allowed value (100000).");
-                    return;
-                }
-
                 if (args.length < 3) {
                     sender.sendMessage("§cUsage: /bab set maxjps <seconds>");
                     return;
                 }
 
-                if (args[2].isEmpty() || args[2].equals("0") || !Utils.isInteger(args[2])) {
+                Integer maxJps = Utils.getInteger(args[2]);
+                if (maxJps == null || maxJps == 0) {
                     sender.sendMessage("§cPlease enter a valid number!");
-                    return; // domanda ma se hai tolto il get
+                    return;
+                }
+
+                if (maxJps > 100000) {
+                    sender.sendMessage("§cMax joins per second exceeds the maximum allowed value (100000).");
+                    return;
                 }
 
                 plugin.getABConfig().maxJoinsPerSecond = maxJps;
@@ -85,19 +84,20 @@ public class Set implements SubCommand {
                 sender.sendMessage("Max joins per second set to " + maxJps + "!");
                 break;
             default:
-                sender.sendMessage("§cUsage: /bab set duration / maxjps <seconds>");
+                sender.sendMessage("§cUsage: /bab set <duration/maxjps> <seconds>");
         }
     }
 
     @Override
     public List<String> getTabCompletion(String[] args) {
         if (args.length == 2) {
-            return Collections.singletonList("<maxjps|duration>");
+            return List.of("maxjps", "duration");
         }
 
         if (args.length == 3) {
             return Collections.singletonList("<number>");
         }
+
         return Collections.emptyList();
     }
 

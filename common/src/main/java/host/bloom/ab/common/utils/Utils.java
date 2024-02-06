@@ -6,12 +6,15 @@ import java.lang.reflect.Method;
 
 public class Utils {
 
-    public static boolean isInteger(String string) {
+    /**
+     * Parse a string as an integer
+     * @return The Integer or null if invalid
+     */
+    public static Integer getInteger(String string) {
         try {
-            Integer.parseInt(string);
-            return true;
+            return Integer.parseInt(string);
         } catch (NumberFormatException exception) {
-            return false;
+            return null;
         }
     }
 

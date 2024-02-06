@@ -22,31 +22,29 @@ public class Force implements SubCommand {
     public void run(Sender sender, String[] args) {
 
         if (args.length != 2) {
-            sender.sendMessage("§cUsage: /BloomAB force <seconds>");
+            sender.sendMessage("§eUsage: /bab force §6<seconds>");
             return;
         }
 
-        boolean isNumber = Utils.isInteger(args[1]);
-
-        if (!isNumber) {
+        Integer seconds = Utils.getInteger(args[1]);
+        if (seconds == null) {
             sender.sendMessage("§cPlease enter a valid number!");
             return;
         }
-
-        int seconds = Integer.parseInt(args[1]);
 
         if (seconds < 1) {
             sender.sendMessage("§cPlease enter a valid number!");
             return;
         }
+
         if (plugin.getManager().isForceTrigger()) {
-            sender.sendMessage("Trigger is already §aenabled§7!");
+            sender.sendMessage("§cTrigger is already enabled!");
             return;
         }
 
         plugin.getManager().setForceTrigger(true, seconds).exceptionally(e -> {
-            e.printStackTrace();
             sender.sendMessage("§cFailed to enable the trigger. Check the console for more details.");
+            e.printStackTrace();
             return null;
         }).thenAccept(success -> {
             if (success != null) {

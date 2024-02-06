@@ -41,8 +41,10 @@ public class WaterfallPlugin extends Plugin implements AbstractPlugin {
         getProxy().getPluginManager().registerCommand(this, new WaterfallCommandHandler(this));
 
         // Initialize the login hook channel
-        if (!this.config.catchRawConnections) this.getABLogger().warning("The Waterfall version of the plugin does not support using internal APIs for connections, defaulting to catching raw connections!");
         new WaterfallLoginHookChannel(manager);
+
+        // Handle other tasks
+        this.afterStartup();
     }
 
     @Override
@@ -69,6 +71,11 @@ public class WaterfallPlugin extends Plugin implements AbstractPlugin {
     @Override
     public Config getABConfig() {
         return this.config;
+    }
+
+    @Override
+    public Platform getPlatform() {
+        return Platform.WATERFALL;
     }
 
 }

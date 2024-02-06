@@ -15,6 +15,9 @@ public class UpdateChecker {
 
     private static final Gson gson = new GsonBuilder().create();
 
+    /**
+     * Handle checking for new release on GitHub
+     */
     public static void handle(AbstractPlugin plugin) {
         if (!plugin.getABConfig().checkForUpdates) return;
 
