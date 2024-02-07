@@ -27,7 +27,7 @@ public interface AbstractPlugin {
     Platform getPlatform();
 
     default void afterStartup() {
-        this.getABLogger().info("Successfully loaded! Version: v" + this.getVersion() + ", location: " + this.getABConfig().location.getDisplayName());
+        this.getABLogger().info("Successfully loaded version: v%s, location: %s!".formatted(this.getVersion(), this.getABConfig().location.getDisplayName()));
 
         // Check for new updates in the background
         UpdateChecker.handle(this);

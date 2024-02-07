@@ -66,7 +66,7 @@ public final class Config {
         konfig.set("limits.max-joins-per-second", this.maxJoinsPerSecond);
         konfig.set("api.endpoint", this.ipAddress);
         konfig.set("api.secret", this.secretKey);
-        konfig.set("options.location", this.location);
+        konfig.set("options.location", this.blockNewJoins != null ? this.blockNewJoins.name() : null);
         konfig.set("options.catch-raw-connections", this.catchRawConnections);
         konfig.set("options.check-for-updates", this.checkForUpdates);
         konfig.set("options.block-new-joins", this.blockNewJoins != null ? this.blockNewJoins.name() : null);
