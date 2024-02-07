@@ -1,9 +1,10 @@
 package host.bloom.ab.common.config;
 
 public enum Location {
-    ASHBURN("Ashburn", "https://abapi-ash.bloom.host"),
-    LOS_ANGELES("Los Angeles", "https://abapi-la.bloom.host"),
-    GERMANY("Germany", "https://abapi-fsn.bloom.host");
+    // Todo: set up and change endpoints
+    ASHBURN("Ashburn", "https://abapi.bloom.host/"),
+    LOS_ANGELES("Los Angeles", "https://abapi.bloom.host/"),
+    GERMANY("Germany", "https://abapi.lowhosting.org/");
 
     private final String displayName;
     private final String endpoint;

@@ -49,7 +49,7 @@ public class CounterManager {
                 if (isStop) {
                     data = "STOP=1&ip_address=" + config.ipAddress + "&secret_key=" + config.secretKey;
                 } else {
-                    data = "triggerTime=" + this.forcedTriggerDuration + "&ip_address=" + config.ipAddress + "&block_new_joins=" + config.blockNewJoins + "&secret_key=" + config.secretKey + "&maxrps=" + config.maxJoinsPerSecond;
+                    data = "triggerTime=" + this.forcedTriggerDuration + "&ip_address=" + config.ipAddress + "&block_new_joins=" + config.blockNewJoins.getRaw() + "&secret_key=" + config.secretKey + "&maxrps=" + config.maxJoinsPerSecond;
                 }
 
                 try (DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {

@@ -31,9 +31,6 @@ public class WaterfallPlugin extends Plugin implements AbstractPlugin {
             return;
         }
 
-        // Check for new updates in the background
-        UpdateChecker.handle(this);
-
         // Initialize the manager
         this.manager = new CounterManager(this);
 
