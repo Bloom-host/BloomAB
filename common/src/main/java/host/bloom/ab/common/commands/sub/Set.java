@@ -3,9 +3,11 @@ package host.bloom.ab.common.commands.sub;
 import host.bloom.ab.common.AbstractPlugin;
 import host.bloom.ab.common.commands.Sender;
 import host.bloom.ab.common.commands.SubCommand;
+import host.bloom.ab.common.config.Location;
 import host.bloom.ab.common.utils.Utils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class Set implements SubCommand {
     @Override
     public void run(Sender sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage("§cUsage: /bab set <duration/maxjps> <value>");
+            sender.sendMessage("§cUsage: /bab set <duration/maxjps/location> <value>");
             return;
         }
 
@@ -52,6 +54,7 @@ public class Set implements SubCommand {
                     plugin.getABConfig().save();
                 } catch (IOException exception) {
                     sender.sendMessage("§cUnable to save config: " + exception.getMessage());
+                    return;
                 }
 
                 sender.sendMessage("Trigger duration set to " + duration + " seconds!");
@@ -79,23 +82,61 @@ public class Set implements SubCommand {
                     plugin.getABConfig().save();
                 } catch (IOException exception) {
                     sender.sendMessage("§cUnable to save config: " + exception.getMessage());
+                    return;
                 }
 
                 sender.sendMessage("Max joins per second set to " + maxJps + "!");
                 break;
+
+            case "location":
+                if (args.length < 3 || args[2].isEmpty()) {
+                    sender.sendMessage("§cUsage: /bab set location <location>");
+                    return;
+                }
+
+                Location location;
+                try {
+                    location = Location.valueOf(args[2]);
+                } catch (IllegalArgumentException exception) {
+                    sender.sendMessage("§cInvalid location§f: §4" + args[2]);
+                    return;
+                }
+
+                plugin.getABConfig().location = location;
+                try {
+                    plugin.getABConfig().save();
+                } catch (IOException exception) {
+                    sender.sendMessage("§cUnable to save config§f: §4" + exception.getMessage());
+                    return;
+                }
+
+                sender.sendMessage("§eSet location to§f: §6" + location.getDisplayName());
+                break;
+
             default:
-                sender.sendMessage("§cUsage: /bab set <duration/maxjps> <seconds>");
+                sender.sendMessage("§cUsage: /bab set <duration/maxjps/location> <value>");
         }
     }
 
     @Override
     public List<String> getTabCompletion(String[] args) {
         if (args.length == 2) {
-            return List.of("maxjps", "duration");
+            return List.of("maxjps", "duration", "location");
         }
 
         if (args.length == 3) {
-            return Collections.singletonList("<number>");
+            switch (args[1]) {
+                case "maxjps":
+                case "duration": {
+                    return Collections.singletonList("<number>");
+                }
+
+                case "location": {
+                    List<String> locations = new ArrayList<>();
+                    for (Location location : Location.values()) locations.add(location.name());
+                    return locations;
+                }
+            }
         }
 
         return Collections.emptyList();
