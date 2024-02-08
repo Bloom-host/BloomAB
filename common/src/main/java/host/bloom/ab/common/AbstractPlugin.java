@@ -34,7 +34,7 @@ public interface AbstractPlugin {
     default void afterStartup() {
 
         // Ensure it's on a supported port
-        List<Integer> supportedPorts = List.of(25565);
+        List<Integer> supportedPorts = List.of(25565, 25566, 25567);
         if (!supportedPorts.contains(this.getPort())) {
             throw new RuntimeException("The server is not using a supported port! Please ensure it's using one of the following ports, and restart: " + supportedPorts.stream().map(String::valueOf).collect(Collectors.joining(", ")));
         }
