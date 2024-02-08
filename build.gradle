@@ -11,7 +11,7 @@ plugins {
 ext {
     pluginName = 'BloomAB'
     pluginVersion = '1.3'
-    pluginDescription = 'description here'
+    pluginDescription = 'Anti bot protection for Bloom servers'
     pluginAuthor = 'Bloom'
     pluginWebsite = 'https://bloom.host'
 }

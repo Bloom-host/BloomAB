@@ -6,15 +6,17 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.proxy.ProxyServer;
+import com.velocitypowered.proxy.VelocityServer;
+import com.velocitypowered.proxy.network.ConnectionManager;
 import dev.geri.konfig.util.InvalidConfigurationException;
 import host.bloom.ab.common.AbstractPlugin;
 import host.bloom.ab.common.config.Config;
 import host.bloom.ab.common.managers.CounterManager;
 import host.bloom.ab.common.utils.Logger;
 import host.bloom.ab.common.utils.Scheduler;
-import host.bloom.ab.common.utils.UpdateChecker;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.file.Paths;
 
 @Plugin(id = "@id@", name = "@name@", version = "@version@", description = "@description@")
@@ -56,8 +58,16 @@ public class VelocityPlugin implements AbstractPlugin {
 
             // Initialize the login hook channel
             try {
-                new VelocityLoginHookChannel(this, server);
+                Class<?> velocityServerClass = VelocityServer.class;
+                Field cmField = velocityServerClass.getDeclaredField("cm");
+                cmField.setAccessible(true);
+
+                // Initialize the connection manager
+                ConnectionManager connectionManager = (ConnectionManager) cmField.get(server);
+                VelocityLoginHookChannel channel = new VelocityLoginHookChannel(this, connectionManager.getServerChannelInitializer().get());
+                connectionManager.getServerChannelInitializer().set(channel);
                 return;
+
             } catch (Exception exception) {
                 // Impossible to get exception, only for new version of Velocity.
                 this.getABLogger().error("Unable to initialize raw connection catcher, using built-in events: " + exception.getMessage());

@@ -90,6 +90,7 @@ public class Handler {
                 §e/bab forcestop§r: §7Force stop the trigger and keep it disabled until the finish of the attack
                 §e/bab set maxjps §6<number>§r: §7Set max joins per second
                 §e/bab set duration §6<seconds>§r: §7Set trigger duration
+                §e/bab set location §6<location>§r: §7Set server location
                 §r
                 §6§lCONNECTION STATS§r:
                 §7• §eTrigger joins per second: §6%s rps
