@@ -1,4 +1,0 @@
-name: BloomAB
-version: '${project.version}'
-main: me.bloomab.BloomAB
-author: Bloom

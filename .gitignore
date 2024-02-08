@@ -1,0 +1,10 @@
+# IDEs
+.idea/
+.vscode/
+
+# Gradle
+.gradle/
+build/
+
+# Run configurations
+*run/

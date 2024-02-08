@@ -1,0 +1,18 @@
+# This is the configuration file for BloomAB
+# Supported locations: ASHBURN, LOS_ANGELES, GERMANY
+# Block new join methods: ENABLED, NEW_PLAYERS_ONLY, DISABLED
+# For any questions, please contact us at: discord.gg/bloom
+
+limits:
+  trigger-duration: 120
+  max-joins-per-second: 120
+
+api:
+  endpoint: disabled
+  secret: disabled
+
+options:
+  location: ASHBURN
+  catch-raw-connections: true
+  block-new-joins: NEW_PLAYERS_ONLY
+  check-for-updates: true

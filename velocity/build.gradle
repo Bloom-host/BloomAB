@@ -1,0 +1,22 @@
+dependencies {
+    // Include the common
+    implementation project(':common')
+
+    // We use some Velocity internals, so we have to use the JAR
+    def velocityJar = files('libs/velocity-3.3.0-SNAPSHOT-346.jar')
+    compileOnly velocityJar
+    annotationProcessor velocityJar
+}
+
+// Change the BloomAB.java details based on the project settings
+blossom {
+    replaceTokenIn('src/main/java/host/bloom/ab/velocity/VelocityPlugin.java')
+    replaceToken '@name@', project.pluginName
+    replaceToken '@id@', project.pluginName.toLowerCase()
+    replaceToken '@version@', project.pluginVersion
+    replaceToken '@description@', project.pluginDescription
+}
+
+// Create the JAR
+shadowJar { archiveFileName = "${project.pluginName}-${project.pluginVersion}-velocity.jar" }
+artifacts { archives shadowJar; shadow shadowJar }

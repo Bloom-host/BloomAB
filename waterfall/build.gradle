@@ -1,0 +1,24 @@
+dependencies {
+    // Include the common
+    implementation project(':common')
+
+    // We use some BungeeCord internals, so we have to use the JAR
+    compileOnly files('libs/waterfall-1.20-562.jar')
+}
+
+// Change the bungee.yml details based on the project settings
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        expand(
+                'pluginName': project.pluginName,
+                'pluginVersion': project.pluginVersion,
+                'pluginDescription': project.pluginDescription,
+                'pluginAuthor': project.pluginAuthor
+        )
+        include 'bungee.yml'
+    }
+}
+
+// Create the JAR
+shadowJar { archiveFileName = "${project.pluginName}-${project.pluginVersion}-waterfall.jar" }
+artifacts { archives shadowJar; shadow shadowJar }
