@@ -6,7 +6,7 @@ import host.bloom.ab.common.config.Config;
 import host.bloom.ab.common.managers.CounterManager;
 import host.bloom.ab.common.utils.Logger;
 import host.bloom.ab.common.utils.Scheduler;
-import host.bloom.ab.common.utils.UpdateChecker;
+import net.md_5.bungee.api.config.ListenerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
 
 import java.io.IOException;
@@ -73,6 +73,14 @@ public class WaterfallPlugin extends Plugin implements AbstractPlugin {
     @Override
     public Platform getPlatform() {
         return Platform.WATERFALL;
+    }
+
+    @Override
+    public int getPort() {
+        for (ListenerInfo listener : super.getProxy().getConfig().getListeners()) {
+            return listener.getHost().getPort();
+        }
+        return 0;
     }
 
 }

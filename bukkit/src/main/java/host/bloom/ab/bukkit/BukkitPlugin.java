@@ -6,7 +6,6 @@ import host.bloom.ab.common.config.Config;
 import host.bloom.ab.common.managers.CounterManager;
 import host.bloom.ab.common.utils.Logger;
 import host.bloom.ab.common.utils.Scheduler;
-import host.bloom.ab.common.utils.UpdateChecker;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -71,6 +70,11 @@ public class BukkitPlugin extends JavaPlugin implements AbstractPlugin {
     @Override
     public Platform getPlatform() {
         return Platform.BUKKIT;
+    }
+
+    @Override
+    public int getPort() {
+        return this.getServer().getPort();
     }
 
 }

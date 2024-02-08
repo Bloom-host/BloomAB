@@ -66,6 +66,9 @@ public class VelocityPlugin implements AbstractPlugin {
                 ConnectionManager connectionManager = (ConnectionManager) cmField.get(server);
                 VelocityLoginHookChannel channel = new VelocityLoginHookChannel(this, connectionManager.getServerChannelInitializer().get());
                 connectionManager.getServerChannelInitializer().set(channel);
+
+                // Handle other tasks
+                this.afterStartup();
                 return;
 
             } catch (Exception exception) {
@@ -109,6 +112,11 @@ public class VelocityPlugin implements AbstractPlugin {
     @Override
     public Platform getPlatform() {
         return Platform.VELOCITY;
+    }
+
+    @Override
+    public int getPort() {
+        return this.server.getBoundAddress().getPort();
     }
 
 }
