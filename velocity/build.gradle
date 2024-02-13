@@ -8,6 +8,11 @@ dependencies {
     annotationProcessor velocityJar
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
 // Change the BloomAB.java details based on the project settings
 blossom {
     replaceTokenIn('src/main/java/host/bloom/ab/velocity/VelocityPlugin.java')
