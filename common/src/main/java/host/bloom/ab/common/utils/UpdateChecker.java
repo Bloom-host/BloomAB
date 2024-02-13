@@ -2,7 +2,15 @@ package host.bloom.ab.common.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+
 import host.bloom.ab.common.AbstractPlugin;
+import host.bloom.ab.common.utils.GitHubRelease;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,13 +19,14 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.stream.Collectors;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.lang.reflect.Type;
+
 public class UpdateChecker {
 
-    private static final Gson gson = new GsonBuilder().create();
+	static Gson gson = new GsonBuilder().create();
 
-    /**
-     * Handle checking for new release on GitHub
-     */
     public static void handle(AbstractPlugin plugin) {
         if (!plugin.getABConfig().checkForUpdates) return;
 
@@ -33,17 +42,17 @@ public class UpdateChecker {
             }
 
             // Check if the version has changed
-            if (release.tagName() != null && plugin.getVersion().equalsIgnoreCase(release.tagName())) {
+            if (release.tagName != null && plugin.getVersion().equalsIgnoreCase(release.tagName)) {
                 plugin.getABLogger().info("You are running the latest version!");
                 return;
             }
 
             // Find the right asset. If there isn't a JAR, we will just
             // offer the release link itself
-            String downloadLink = release.htmlUrl();
-            for (GitHubRelease.Asset asset : release.assets()) {
-                if (asset.name().contains(".jar")) {
-                    downloadLink = asset.downloadUrl();
+            String downloadLink = release.htmlUrl;
+            for (GitHubRelease.Asset asset : release.assets) {
+                if (asset.name.contains(".jar")) {
+                    downloadLink = asset.downloadUrl;
                     break;
                 }
             }
