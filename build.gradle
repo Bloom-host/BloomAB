@@ -45,7 +45,7 @@ subprojects {
 
     dependencies {
         // Use repackaged SnakeYAML for configs
-        implementation 'dev.geri:Konfig:1.6'
+        implementation 'dev.geri:Konfig:1.7'
 
         // Use GSON for JSON processing
         implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
