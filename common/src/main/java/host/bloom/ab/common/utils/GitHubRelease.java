@@ -4,13 +4,13 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public record GitHubRelease(
-        @SerializedName("tag_name") String tagName,
-        @SerializedName("html_url") String htmlUrl,
-        @SerializedName("assets") ArrayList<Asset> assets
-) {
-    public record Asset(
-            @SerializedName("name") String name,
-            @SerializedName("browser_download_url") String downloadUrl
-    ) {}
+public class GitHubRelease {
+        @SerializedName("tag_name") public String tagName;
+        @SerializedName("html_url") public String htmlUrl;
+        @SerializedName("assets") public ArrayList<Asset> assets;
+
+	public class Asset {
+	        @SerializedName("name") public String name;
+	        @SerializedName("browser_download_url") public String downloadUrl;
+	}
 }
