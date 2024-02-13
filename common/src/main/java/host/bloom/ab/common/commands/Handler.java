@@ -83,31 +83,34 @@ public class Handler {
             triggerStatus = "§aTrigger is not currently enabled.";
         }
 
-        sender.sendMessage("""
-                §8§m                                                          §r
-                §6§lBLOOMAB COMMANDS§r:
-                §e/bab force §6<seconds>§r: §7Enable force trigger for X seconds
-                §e/bab forcestop§r: §7Force stop the trigger and keep it disabled until the finish of the attack
-                §e/bab set maxjps §6<number>§r: §7Set max joins per second
-                §e/bab set duration §6<seconds>§r: §7Set trigger duration
-                §e/bab set location §6<location>§r: §7Set server location
-                §r
-                §6§lCONNECTION STATS§r:
-                §7• §eTrigger joins per second: §6%s rps
-                §7• §eTrigger duration: §6%s seconds
-                §7• §eBlock new joins: §6%s
-                §7• §eCurrent joins per second: §6%s
-                §7• %s
-                §8§m                                                          §r
-                """
-                .formatted(
-                        plugin.getABConfig().maxJoinsPerSecond,
-                        plugin.getABConfig().triggerDuration,
-                        plugin.getABConfig().blockNewJoins,
-                        plugin.getManager().getCurrentCount(System.currentTimeMillis() / 1000),
-                        triggerStatus
-                )
-        );
+		String[] messageLines = {
+			"§8§m                                                          §r",
+			"§6§lBloomAB COMMANDS§r:",
+			"§e/bab force §6<seconds>§r: §7Enable force trigger for X seconds",
+			"§e/bab forcestop§r: §7Force stop the trigger and keep it disabled until the finish of the attack",
+			"§e/bab set maxjps §6<number>§r: §7Set max joins per second",
+			"§e/bab set duration §6<seconds>§r: §7Set trigger duration",
+			"§e/bab set location §6<location>§r: §7Set server location",
+			"§r",
+			"§6§lCONNECTION STATS§r:",
+			"§7• §eTrigger joins per second: §6%s rps",
+			"§7• §eTrigger duration: §6%s seconds",
+			"§7• §eBlock new joins: §6%s",
+			"§7• §eCurrent joins per second: §6%s",
+			"§7• %s",
+			"§8§m                                                          §r"
+		};
+
+		String formattedMessage = String.format(
+			String.join("%n", messageLines),
+			plugin.getABConfig().maxJoinsPerSecond,
+			plugin.getABConfig().triggerDuration,
+			plugin.getABConfig().blockNewJoins,
+			plugin.getManager().getCurrentCount(System.currentTimeMillis() / 1000),
+			triggerStatus
+		);
+
+		sender.sendMessage(formattedMessage);
 
     }
 }
