@@ -6,6 +6,11 @@ dependencies {
     compileOnly files('libs/waterfall-1.20-562.jar')
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
 // Change the bungee.yml details based on the project settings
 processResources {
     from(sourceSets.main.resources.srcDirs) {
