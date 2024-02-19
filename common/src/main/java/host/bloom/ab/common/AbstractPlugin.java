@@ -6,6 +6,7 @@ import host.bloom.ab.common.utils.Logger;
 import host.bloom.ab.common.utils.Scheduler;
 import host.bloom.ab.common.utils.UpdateChecker;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,12 +35,12 @@ public interface AbstractPlugin {
     default void afterStartup() {
 
         // Ensure it's on a supported port
-        List<Integer> supportedPorts = List.of(25565, 25566, 25567);
+        List<Integer> supportedPorts = Arrays.asList(25565, 25566, 25567);
         if (!supportedPorts.contains(this.getPort())) {
             throw new RuntimeException("The server is not using a supported port! Please ensure it's using one of the following ports, and restart: " + supportedPorts.stream().map(String::valueOf).collect(Collectors.joining(", ")));
         }
 
-        this.getABLogger().info("Successfully loaded version: v%s, location: %s!".formatted(this.getVersion(), this.getABConfig().location.getDisplayName()));
+        this.getABLogger().info("Successfully loaded version: v" + this.getVersion() + ", location: " + this.getABConfig().location.getDisplayName() + "!");
 
         // Check for new updates in the background
         UpdateChecker.handle(this);

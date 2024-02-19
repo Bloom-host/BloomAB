@@ -6,6 +6,8 @@ dependencies {
     compileOnly files('libs/waterfall-1.20-562.jar')
 }
 
+// We explicitly skip --release 8 for this, since unsafe would fail
+
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8

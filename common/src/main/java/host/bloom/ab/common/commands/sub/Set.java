@@ -8,6 +8,7 @@ import host.bloom.ab.common.utils.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -121,7 +122,7 @@ public class Set implements SubCommand {
     @Override
     public List<String> getTabCompletion(String[] args) {
         if (args.length == 2) {
-            return List.of("maxjps", "duration", "location");
+            return Arrays.asList("maxjps", "duration", "location");
         }
 
         if (args.length == 3) {
