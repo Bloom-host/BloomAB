@@ -54,6 +54,12 @@ subprojects {
 
 // Task to create a single 'fat' JAR including all subprojects
 task uberJar(type: ShadowJar) {
+
+    // Relocate important dependencies to avoid any collisions at runtime
+    relocate 'org.yaml.snakeyaml', 'host.bloom.ab.dependencies.snakeyml'
+    relocate 'com.google.gson', 'host.bloom.ab.dependencies.gson'
+    relocate 'org.apache.commons', 'host.bloom.ab.dependencies.apache.commons'
+
     // Set the output file name and location
     archiveFileName = "${project.ext.pluginName}-${project.ext.pluginVersion}.jar"
 

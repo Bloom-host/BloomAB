@@ -2,15 +2,7 @@ package host.bloom.ab.common.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-
 import host.bloom.ab.common.AbstractPlugin;
-import host.bloom.ab.common.utils.GitHubRelease;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,13 +11,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.stream.Collectors;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.lang.reflect.Type;
-
 public class UpdateChecker {
 
-	static Gson gson = new GsonBuilder().create();
+    static Gson gson = new GsonBuilder().create();
 
     public static void handle(AbstractPlugin plugin) {
         if (!plugin.getABConfig().checkForUpdates) return;

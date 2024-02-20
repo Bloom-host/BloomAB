@@ -5,6 +5,7 @@ import host.bloom.ab.common.commands.sub.Force;
 import host.bloom.ab.common.commands.sub.ForceStop;
 import host.bloom.ab.common.commands.sub.Set;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -65,7 +66,7 @@ public class Handler {
         if (!sender.hasPermission("bab.admin")) return Collections.emptyList();
 
         // Return the subcommands
-        if (args.length <= 1) return commands.keySet().stream().toList();
+        if (args.length <= 1) return new ArrayList<>(commands.keySet());
 
         // See if it's a command
         SubCommand command = commands.get(args[0].toLowerCase());
