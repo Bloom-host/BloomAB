@@ -52,7 +52,7 @@ public class MessageKeys implements SettingsHolder {
 
     public static final Property<String> trigger_set_duration = newProperty("trigger.set-duration", "{prefix} <red>Trigger duration set to <gold>{duration} seconds!");
 
-    public static final Property<String> action_bar = newProperty("trigger.action-bar", "{prefix} JPS {joins}/sec");
+    public static final Property<String> action_bar = newProperty("trigger.action-bar", "{prefix} <gold>JPS <yellow>{joins}/sec");
 
     public static final Property<String> exceeds_max_joins = newProperty("set.exceeds-max-joins", "{prefix} <red>Max joins per second exceeds the maximum allowed value (100000).");
 
