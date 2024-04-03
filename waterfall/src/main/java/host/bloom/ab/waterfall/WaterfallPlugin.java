@@ -41,7 +41,7 @@ public class WaterfallPlugin extends Plugin implements AbstractPlugin {
         getProxy().getPluginManager().registerCommand(this, new WaterfallCommandHandler(this));
 
         // Initialize the quit listener.
-        getProxy().getPluginManager().registerListener(this, new WaterfallQuitListener(this.manager));
+        getProxy().getPluginManager().registerListener(this, new WaterfallLoginListener(this.manager));
 
         // Initialize the login hook channel
         new WaterfallLoginHookChannel(manager);

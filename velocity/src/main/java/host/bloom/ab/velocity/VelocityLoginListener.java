@@ -29,4 +29,13 @@ public class VelocityLoginListener {
 
         this.plugin.getManager().removeSeer(player.getUniqueId());
     }
+
+    @Subscribe
+    public void onJoin(LoginEvent event) {
+        Player player = event.getPlayer();
+
+        if (player.hasPermission("bab.admin.actionbar")) {
+            this.plugin.getManager().addSeer(player.getUniqueId());
+        }
+    }
 }
