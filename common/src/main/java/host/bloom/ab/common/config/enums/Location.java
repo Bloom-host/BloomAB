@@ -1,4 +1,4 @@
-package host.bloom.ab.common.config;
+package host.bloom.ab.common.config.enums;
 
 public enum Location {
     // Todo: set up and change endpoints

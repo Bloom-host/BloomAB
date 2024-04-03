@@ -3,7 +3,7 @@ package host.bloom.ab.common.commands.sub;
 import host.bloom.ab.common.AbstractPlugin;
 import host.bloom.ab.common.commands.Sender;
 import host.bloom.ab.common.commands.SubCommand;
-
+import host.bloom.ab.common.config.enums.Messages;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,18 +23,17 @@ public class ForceStop implements SubCommand {
     @Override
     public void run(Sender sender, String[] args) {
         if (!plugin.getManager().isForceTrigger()) {
-            sender.sendMessage("Trigger is already &cstopped&f!");
+            sender.sendMessage(Messages.trigger_stopped.getMessage());
             return;
         }
 
         plugin.getManager().setForceTrigger(false, 0);
-        sender.sendMessage("Trigger manually &cstopped&f.");
+        sender.sendMessage(Messages.trigger_manually_stopped.getMessage());
     }
 
     @Override
     public List<String> getTabCompletion(String[] args) {
-        if (args.length == 2) return Collections.singletonList("<seconds>");
+        if (args.length == 2) return Collections.singletonList("[seconds]");
         return Collections.emptyList();
     }
-
 }

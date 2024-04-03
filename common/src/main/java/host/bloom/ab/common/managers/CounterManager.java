@@ -1,8 +1,8 @@
 package host.bloom.ab.common.managers;
 
+import ch.jalu.configme.SettingsManager;
 import host.bloom.ab.common.AbstractPlugin;
-import host.bloom.ab.common.config.Config;
-
+import host.bloom.ab.common.config.ConfigKeys;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -15,7 +15,6 @@ import java.util.concurrent.TimeUnit;
 public class CounterManager {
 
     private final AbstractPlugin plugin;
-    private final Config config;
     private final Map<Long, Integer> connectionCounts = new HashMap<>();
 
     private long lastTriggerTime = 0;
@@ -23,9 +22,10 @@ public class CounterManager {
     private boolean activated = false;
     private int forcedTriggerDuration;
 
+    private final SettingsManager config = ConfigManager.getConfig();
+
     public CounterManager(AbstractPlugin plugin) {
         this.plugin = plugin;
-        this.config = plugin.getABConfig();
 
         // Initialize the schedule to track connections
         plugin.getScheduler().schedule(() -> {
@@ -39,7 +39,7 @@ public class CounterManager {
 
             HttpURLConnection conn = null;
             try {
-                conn = (HttpURLConnection) new URL(this.config.location.getEndpoint()).openConnection();
+                conn = (HttpURLConnection) new URL(this.config.getProperty(ConfigKeys.api_endpoint)).openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 conn.setRequestProperty("User-Agent", "BloomAB");
@@ -47,9 +47,13 @@ public class CounterManager {
 
                 String data;
                 if (isStop) {
-                    data = "STOP=1&ip_address=" + config.ipAddress + "&secret_key=" + config.secretKey;
+                    data = "STOP=1&ip_address=" + this.config.getProperty(ConfigKeys.api_endpoint) + "&secret_key=" + this.config.getProperty(ConfigKeys.api_secret);
                 } else {
-                    data = "triggerTime=" + this.forcedTriggerDuration + "&ip_address=" + config.ipAddress + "&block_new_joins=" + config.blockNewJoins.getRaw() + "&secret_key=" + config.secretKey + "&maxrps=" + config.maxJoinsPerSecond;
+                    data = "triggerTime=" + this.forcedTriggerDuration + "&ip_address=" +
+                            this.config.getProperty(ConfigKeys.api_endpoint) + "&block_new_joins=" +
+                            this.config.getProperty(ConfigKeys.block_new_joins).getRaw() + "&secret_key=" +
+                            this.config.getProperty(ConfigKeys.api_secret) + "&maxrps=" +
+                            this.config.getProperty(ConfigKeys.max_joins_per_second);
                 }
 
                 try (DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {
@@ -96,7 +100,7 @@ public class CounterManager {
         }
 
         this.lastTriggerTime = System.currentTimeMillis() / 1000;
-        this.forcedTriggerDuration = seconds == 0 ? config.triggerDuration : seconds;
+        this.forcedTriggerDuration = seconds == 0 ? this.config.getProperty(ConfigKeys.trigger_duration) : seconds;
 
         return makeHttpRequest(!forceTrigger).thenCompose(response -> {
             if (!response) {
@@ -132,11 +136,11 @@ public class CounterManager {
         int currentCount = connectionCounts.getOrDefault(currentTime, 0);
         connectionCounts.put(currentTime, currentCount + 1);
 
-        if ((currentCount + 1 > config.maxJoinsPerSecond || forceTrigger) && (currentTime - lastTriggerTime) > 1 && !activated) {
+        if ((currentCount + 1 > this.config.getProperty(ConfigKeys.max_joins_per_second) || forceTrigger) && (currentTime - lastTriggerTime) > 1 && !activated) {
             lastTriggerTime = currentTime;
             activated = true;
             plugin.getABLogger().error("Limit reached! Trigger enabled. JPS: " + (currentCount + 1));
-            setForceTrigger(true, config.triggerDuration).exceptionally(ex -> {
+            setForceTrigger(true, this.config.getProperty(ConfigKeys.trigger_duration)).exceptionally(ex -> {
                 ex.printStackTrace();
                 return null;
             });
@@ -178,6 +182,4 @@ public class CounterManager {
     public boolean isForceTrigger() {
         return forceTrigger;
     }
-
 }
-

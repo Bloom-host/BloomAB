@@ -3,7 +3,8 @@ package host.bloom.ab.common.utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import host.bloom.ab.common.AbstractPlugin;
-
+import host.bloom.ab.common.config.ConfigKeys;
+import host.bloom.ab.common.managers.ConfigManager;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +17,7 @@ public class UpdateChecker {
     static Gson gson = new GsonBuilder().create();
 
     public static void handle(AbstractPlugin plugin) {
-        if (!plugin.getABConfig().checkForUpdates) return;
+        if (!ConfigManager.getConfig().getProperty(ConfigKeys.check_for_updates)) return;
 
         plugin.getScheduler().runAsync(() -> {
 
