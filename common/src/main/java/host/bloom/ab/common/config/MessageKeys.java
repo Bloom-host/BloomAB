@@ -66,7 +66,7 @@ public class MessageKeys implements SettingsHolder {
         add("<dark_gray><underlined>");
         add("<bold><gold>BloomAB Commands</bold><reset>:");
         add("<yellow>/bab force <gold>[seconds]: <gray>Enable force trigger for X seconds");
-        add("<yellow>/bab forcestop: <gray>Set max joins per second");
+        add("<yellow>/bab forcestop: <gray>Force stop the trigger and keep it disabled until the finish of the attack");
         add("<yellow>/bab set maxjps <gold>[number]: <gray>Set max joins per second");
         add("<yellow>/bab set duration <gold>[seconds]: <gray>Set trigger duration");
         add("<yellow>/bab set location <gold>[location]: <gray>Set server location");
