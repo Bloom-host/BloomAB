@@ -1,6 +1,7 @@
 package host.bloom.ab.bukkit;
 
 import host.bloom.ab.common.commands.Sender;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 public class BukkitSender implements Sender {
@@ -13,7 +14,7 @@ public class BukkitSender implements Sender {
 
     @Override
     public void sendMessage(String message) {
-        this.sender.sendMessage(message);
+        this.sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
     }
 
     @Override

@@ -23,12 +23,12 @@ public class ForceStop implements SubCommand {
     @Override
     public void run(Sender sender, String[] args) {
         if (!plugin.getManager().isForceTrigger()) {
-            sender.sendMessage("Trigger is already §cstopped§f!");
+            sender.sendMessage("Trigger is already &cstopped&f!");
             return;
         }
 
         plugin.getManager().setForceTrigger(false, 0);
-        sender.sendMessage("Trigger manually §cstopped§f.");
+        sender.sendMessage("Trigger manually &cstopped&f.");
     }
 
     @Override

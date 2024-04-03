@@ -33,7 +33,7 @@ public class Handler {
     public void execute(Sender sender, String[] strings) {
 
         if (!sender.hasPermission("bab.admin")) {
-            sender.sendMessage("§cYou don't have enough permissions to execute this command!");
+            sender.sendMessage("&cYou don't have enough permissions to execute this command!");
             return;
         }
 
@@ -50,7 +50,7 @@ public class Handler {
         SubCommand subCommand = commands.get(strings[0].toLowerCase());
 
         if (!sender.hasPermission(subCommand.getPermission())) {
-            sender.sendMessage("§cYou don't have enough permissions to execute this command!");
+            sender.sendMessage("&cYou don't have enough permissions to execute this command!");
             return;
         }
 
@@ -79,27 +79,27 @@ public class Handler {
         String triggerStatus;
         if (plugin.getManager().isForceTrigger()) {
             long remainingSeconds = plugin.getManager().getRemainingSeconds();
-            triggerStatus = "§cTrigger is enabled. It will be deactivated in §4" + remainingSeconds + "§c seconds.";
+            triggerStatus = "&cTrigger is enabled. It will be deactivated in &4" + remainingSeconds + "&c seconds.";
         } else {
-            triggerStatus = "§aTrigger is not currently enabled.";
+            triggerStatus = "&aTrigger is not currently enabled.";
         }
 
 		String[] messageLines = {
-			"§8§m                                                          §r",
-			"§6§lBloomAB COMMANDS§r:",
-			"§e/bab force §6<seconds>§r: §7Enable force trigger for X seconds",
-			"§e/bab forcestop§r: §7Force stop the trigger and keep it disabled until the finish of the attack",
-			"§e/bab set maxjps §6<number>§r: §7Set max joins per second",
-			"§e/bab set duration §6<seconds>§r: §7Set trigger duration",
-			"§e/bab set location §6<location>§r: §7Set server location",
-			"§r",
-			"§6§lCONNECTION STATS§r:",
-			"§7• §eTrigger joins per second: §6%s rps",
-			"§7• §eTrigger duration: §6%s seconds",
-			"§7• §eBlock new joins: §6%s",
-			"§7• §eCurrent joins per second: §6%s",
-			"§7• %s",
-			"§8§m                                                          §r"
+			"&8&m                                                          &r",
+			"&6&lBloomAB COMMANDS&r:",
+			"&e/bab force &6<seconds>&r: &7Enable force trigger for X seconds",
+			"&e/bab forcestop&r: &7Force stop the trigger and keep it disabled until the finish of the attack",
+			"&e/bab set maxjps &6<number>&r: &7Set max joins per second",
+			"&e/bab set duration &6<seconds>&r: &7Set trigger duration",
+			"&e/bab set location &6<location>&r: &7Set server location",
+			"&r",
+			"&6&lCONNECTION STATS&r:",
+			"&7• &eTrigger joins per second: &6%s rps",
+			"&7• &eTrigger duration: &6%s seconds",
+			"&7• &eBlock new joins: &6%s",
+			"&7• &eCurrent joins per second: &6%s",
+			"&7• %s",
+			"&8&m                                                          &r"
 		};
 
 		String formattedMessage = String.format(

@@ -2,7 +2,7 @@ package host.bloom.ab.velocity;
 
 import com.velocitypowered.api.command.CommandSource;
 import host.bloom.ab.common.commands.Sender;
-import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 public class VelocitySender implements Sender {
 
@@ -14,7 +14,7 @@ public class VelocitySender implements Sender {
 
     @Override
     public void sendMessage(String message) {
-        this.source.sendMessage(Component.text(message));
+        this.source.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(message));
     }
 
     @Override

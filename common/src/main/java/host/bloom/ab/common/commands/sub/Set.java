@@ -28,25 +28,25 @@ public class Set implements SubCommand {
     @Override
     public void run(Sender sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage("§cUsage: /bab set <duration/maxjps/location> <value>");
+            sender.sendMessage("&cUsage: /bab set <duration/maxjps/location> <value>");
             return;
         }
 
         switch (args[1]) {
             case "duration":
                 if (args.length < 3) {
-                    sender.sendMessage("§cUsage: /bab set duration <seconds>");
+                    sender.sendMessage("&cUsage: /bab set duration <seconds>");
                     return;
                 }
 
                 Integer duration = Utils.getInteger(args[2]);
                 if (duration == null) {
-                    sender.sendMessage("§cPlease enter a valid number!");
+                    sender.sendMessage("&cPlease enter a valid number!");
                     return;
                 }
 
                 if (duration > 3600) {
-                    sender.sendMessage("§cTrigger duration exceeds the maximum allowed value (3600 seconds).");
+                    sender.sendMessage("&cTrigger duration exceeds the maximum allowed value (3600 seconds).");
                     return;
                 }
 
@@ -54,7 +54,7 @@ public class Set implements SubCommand {
                 try {
                     plugin.getABConfig().save();
                 } catch (IOException exception) {
-                    sender.sendMessage("§cUnable to save config: " + exception.getMessage());
+                    sender.sendMessage("&cUnable to save config: " + exception.getMessage());
                     return;
                 }
 
@@ -63,18 +63,18 @@ public class Set implements SubCommand {
 
             case "maxjps":
                 if (args.length < 3) {
-                    sender.sendMessage("§cUsage: /bab set maxjps <seconds>");
+                    sender.sendMessage("&cUsage: /bab set maxjps <seconds>");
                     return;
                 }
 
                 Integer maxJps = Utils.getInteger(args[2]);
                 if (maxJps == null || maxJps == 0) {
-                    sender.sendMessage("§cPlease enter a valid number!");
+                    sender.sendMessage("&cPlease enter a valid number!");
                     return;
                 }
 
                 if (maxJps > 100000) {
-                    sender.sendMessage("§cMax joins per second exceeds the maximum allowed value (100000).");
+                    sender.sendMessage("&cMax joins per second exceeds the maximum allowed value (100000).");
                     return;
                 }
 
@@ -82,7 +82,7 @@ public class Set implements SubCommand {
                 try {
                     plugin.getABConfig().save();
                 } catch (IOException exception) {
-                    sender.sendMessage("§cUnable to save config: " + exception.getMessage());
+                    sender.sendMessage("&cUnable to save config: " + exception.getMessage());
                     return;
                 }
 
@@ -91,7 +91,7 @@ public class Set implements SubCommand {
 
             case "location":
                 if (args.length < 3 || args[2].isEmpty()) {
-                    sender.sendMessage("§cUsage: /bab set location <location>");
+                    sender.sendMessage("&cUsage: /bab set location <location>");
                     return;
                 }
 
@@ -99,7 +99,7 @@ public class Set implements SubCommand {
                 try {
                     location = Location.valueOf(args[2]);
                 } catch (IllegalArgumentException exception) {
-                    sender.sendMessage("§cInvalid location§f: §4" + args[2]);
+                    sender.sendMessage("&cInvalid location&f: &4" + args[2]);
                     return;
                 }
 
@@ -107,15 +107,15 @@ public class Set implements SubCommand {
                 try {
                     plugin.getABConfig().save();
                 } catch (IOException exception) {
-                    sender.sendMessage("§cUnable to save config§f: §4" + exception.getMessage());
+                    sender.sendMessage("&cUnable to save config&f: &4" + exception.getMessage());
                     return;
                 }
 
-                sender.sendMessage("§eSet location to§f: §6" + location.getDisplayName());
+                sender.sendMessage("&eSet location to&f: &6" + location.getDisplayName());
                 break;
 
             default:
-                sender.sendMessage("§cUsage: /bab set <duration/maxjps/location> <value>");
+                sender.sendMessage("&cUsage: /bab set <duration/maxjps/location> <value>");
         }
     }
 
