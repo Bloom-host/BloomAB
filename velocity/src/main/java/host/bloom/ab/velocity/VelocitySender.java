@@ -14,7 +14,7 @@ public class VelocitySender implements Sender {
 
     @Override
     public void sendMessage(String message) {
-        this.source.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(message));
+        this.source.sendMessage(VelocityMethods.color(message));
     }
 
     @Override

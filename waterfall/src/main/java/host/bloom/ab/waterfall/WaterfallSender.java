@@ -15,7 +15,7 @@ public class WaterfallSender implements Sender {
 
     @Override
     public void sendMessage(String message) {
-        this.sender.sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', message)));
+        this.sender.sendMessage(new TextComponent(WaterfallMethods.color(message)));
     }
 
     @Override

@@ -14,7 +14,7 @@ public class BukkitSender implements Sender {
 
     @Override
     public void sendMessage(String message) {
-        this.sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        this.sender.sendMessage(BukkitMethods.color(message));
     }
 
     @Override
