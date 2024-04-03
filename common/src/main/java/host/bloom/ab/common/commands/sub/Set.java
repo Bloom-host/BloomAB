@@ -50,8 +50,10 @@ public class Set implements SubCommand {
                 }
 
                 config.setProperty(ConfigKeys.trigger_duration, duration);
+                config.save();
+                config.reload();
 
-                sender.sendMessage(Messages.trigger_set_duration.getMessage("{duration}", String.valueOf(duration)));
+                sender.sendMessage(Messages.trigger_set_duration.getMessage("{duration}", String.valueOf(config.getProperty(ConfigKeys.trigger_duration))));
                 break;
 
             case "maxjps":
@@ -72,8 +74,10 @@ public class Set implements SubCommand {
                 }
 
                 config.setProperty(ConfigKeys.max_joins_per_second, maxJps);
+                config.save();
+                config.reload();
 
-                sender.sendMessage(Messages.max_join_set.getMessage("{value}", String.valueOf(maxJps)));
+                sender.sendMessage(Messages.max_join_set.getMessage("{value}", String.valueOf(config.getProperty(ConfigKeys.max_joins_per_second))));
                 break;
 
             case "location":
@@ -91,8 +95,10 @@ public class Set implements SubCommand {
                 }
 
                 config.setProperty(ConfigKeys.locations, location);
+                config.save();
+                config.reload();
 
-                sender.sendMessage(Messages.set_location.getMessage("{location}", location.getDisplayName()));
+                sender.sendMessage(Messages.set_location.getMessage("{location}", config.getProperty(ConfigKeys.locations).getDisplayName()));
                 break;
 
             default:
@@ -119,7 +125,9 @@ public class Set implements SubCommand {
 
                 case "location": {
                     List<String> locations = new ArrayList<>();
+
                     for (Location location : Location.values()) locations.add(location.name());
+
                     return locations;
                 }
             }
