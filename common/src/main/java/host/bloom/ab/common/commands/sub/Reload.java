@@ -4,8 +4,6 @@ import host.bloom.ab.common.commands.Sender;
 import host.bloom.ab.common.commands.SubCommand;
 import host.bloom.ab.common.config.enums.Messages;
 import host.bloom.ab.common.managers.ConfigManager;
-import java.util.Collections;
-import java.util.List;
 
 public class Reload implements SubCommand {
 
@@ -19,14 +17,5 @@ public class Reload implements SubCommand {
         ConfigManager.reload();
 
         sender.sendMessage(Messages.reloaded_plugin.getMessage());
-    }
-
-    @Override
-    public List<String> getTabCompletion(String[] args) {
-        if (args.length == 2) {
-            return Collections.singletonList("reload");
-        }
-
-        return Collections.emptyList();
     }
 }
