@@ -7,8 +7,12 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -16,6 +20,7 @@ public class CounterManager {
 
     private final AbstractPlugin plugin;
     private final Map<Long, Integer> connectionCounts = new HashMap<>();
+    private final Set<UUID> seers = new HashSet<>();
 
     private long lastTriggerTime = 0;
     private boolean forceTrigger = false;
@@ -162,6 +167,10 @@ public class CounterManager {
             long currentTime = System.currentTimeMillis() / 1000;
             int currentCount = connectionCounts.getOrDefault(currentTime, 0);
             plugin.getABLogger().info("Number of received JPS: " + currentCount);
+
+            if (!this.seers.isEmpty()) {
+                this.seers.forEach(uuid -> this.plugin.actionbar(uuid, "&6&lBloomAB &8» &6JPS &e" + currentCount + "/sec"));
+            }
         }
     }
 
@@ -181,5 +190,17 @@ public class CounterManager {
 
     public boolean isForceTrigger() {
         return forceTrigger;
+    }
+
+    public void addSeer(UUID uuid) {
+        this.seers.add(uuid);
+    }
+
+    public boolean containsSeer(UUID uuid) {
+        return this.seers.contains(uuid);
+    }
+
+    public void removeSeer(UUID uuid) {
+        this.seers.remove(uuid);
     }
 }

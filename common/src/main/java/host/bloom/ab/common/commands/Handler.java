@@ -2,6 +2,7 @@ package host.bloom.ab.common.commands;
 
 import ch.jalu.configme.SettingsManager;
 import host.bloom.ab.common.AbstractPlugin;
+import host.bloom.ab.common.commands.sub.ActionBar;
 import host.bloom.ab.common.commands.sub.Force;
 import host.bloom.ab.common.commands.sub.ForceStop;
 import host.bloom.ab.common.commands.sub.Reload;
@@ -22,6 +23,7 @@ public class Handler {
 
     public Handler(AbstractPlugin plugin) {
         this.plugin = plugin;
+        commands.put("actionbar", new ActionBar(plugin));
         commands.put("forcestop", new ForceStop(plugin));
         commands.put("reload", new Reload());
         commands.put("force", new Force(plugin));
@@ -93,7 +95,7 @@ public class Handler {
         } else {
             triggerStatus = Messages.trigger_not_enabled.getMessage();
         }
-
+      
         SettingsManager config = ConfigManager.getConfig();
 
         Map<String, String> placeholders = new HashMap<>();

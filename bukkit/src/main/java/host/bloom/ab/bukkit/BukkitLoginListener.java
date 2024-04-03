@@ -1,8 +1,10 @@
 package host.bloom.ab.bukkit;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 
 public class BukkitLoginListener implements Listener {
@@ -16,6 +18,12 @@ public class BukkitLoginListener implements Listener {
     @EventHandler
     public void onPlayerJoinEvent(PlayerJoinEvent e) {
         plugin.getManager().incrementConnectionCount();
+
+        Player player = e.getPlayer();
+
+        if (player.hasPermission("bab.admin.actionbar")) {
+            this.plugin.getManager().addSeer(player.getUniqueId());
+        }
     }
 
     @EventHandler
@@ -23,4 +31,8 @@ public class BukkitLoginListener implements Listener {
         plugin.getManager().incrementConnectionCount();
     }
 
+    @EventHandler
+    public void onPlayerQuitEvent(PlayerQuitEvent event) {
+        this.plugin.getManager().removeSeer(event.getPlayer().getUniqueId());
+    }
 }

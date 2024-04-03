@@ -5,6 +5,7 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.PluginContainer;
+import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.proxy.VelocityServer;
 import com.velocitypowered.proxy.network.ConnectionManager;
@@ -17,6 +18,8 @@ import host.bloom.ab.common.utils.Scheduler;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.nio.file.Paths;
+import java.util.Optional;
+import java.util.UUID;
 
 @Plugin(id = "@id@", name = "@name@", version = "@version@", description = "@description@")
 public class VelocityPlugin implements AbstractPlugin {
@@ -104,6 +107,18 @@ public class VelocityPlugin implements AbstractPlugin {
     @Override
     public File getFolder() {
         return Paths.get("plugins", plugin.getDescription().getName().get()).toFile();
+    }
+
+    @Override
+    public void actionbar(UUID uuid, String message) {
+        Optional<Player> player = this.server.getPlayer(uuid);
+
+        player.ifPresent(value -> value.sendActionBar(VelocityMethods.color(message)));
+    }
+
+    @Override
+    public Optional<Player> getPlayer(UUID uuid) {
+        return this.server.getPlayer(uuid);
     }
 
     @Override
