@@ -44,8 +44,12 @@ subprojects {
     }
 
     dependencies {
-        // Use repackaged SnakeYAML for configs
-        implementation 'dev.geri:Konfig:1.7'
+        // Include minimessage api
+        implementation 'net.kyori:adventure-text-serializer-gson:4.16.0'
+        implementation 'net.kyori:adventure-text-minimessage:4.16.0'
+        implementation 'net.kyori:adventure-platform-bukkit:4.3.2'
+
+        implementation 'ch.jalu:configme:1.4.1'
 
         // Use GSON for JSON processing
         implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
@@ -56,9 +60,11 @@ subprojects {
 task uberJar(type: ShadowJar) {
 
     // Relocate important dependencies to avoid any collisions at runtime
-    relocate 'org.yaml.snakeyaml', 'host.bloom.ab.dependencies.snakeyml'
+    relocate 'ch.jalu', 'host.bloom.ab.dependencies.configme'
     relocate 'com.google.gson', 'host.bloom.ab.dependencies.gson'
     relocate 'org.apache.commons', 'host.bloom.ab.dependencies.apache.commons'
+    // do not relocate, it breaks.
+    //relocate 'net.kyori', 'host.bloom.ab.dependencies.kyori'
 
     // Set the output file name and location
     archiveFileName = "${project.ext.pluginName}-${project.ext.pluginVersion}.jar"
