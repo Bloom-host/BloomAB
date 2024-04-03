@@ -1,16 +1,13 @@
 package host.bloom.ab.common.managers;
 
 import ch.jalu.configme.SettingsManager;
-import com.sun.xml.internal.ws.api.message.Message;
 import host.bloom.ab.common.AbstractPlugin;
 import host.bloom.ab.common.config.ConfigKeys;
 import host.bloom.ab.common.config.enums.Messages;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
