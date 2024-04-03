@@ -110,7 +110,11 @@ public class Set implements SubCommand {
             switch (args[1]) {
                 case "maxjps":
                 case "duration": {
-                    return Collections.singletonList("<number>");
+                    List<String> numbers = new ArrayList<>();
+
+                    for (int amount = 1; amount < 60; amount++) numbers.add(String.valueOf(amount));
+
+                    return numbers;
                 }
 
                 case "location": {

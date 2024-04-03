@@ -5,6 +5,9 @@ import host.bloom.ab.common.commands.Sender;
 import host.bloom.ab.common.commands.SubCommand;
 import host.bloom.ab.common.config.enums.Messages;
 import host.bloom.ab.common.utils.Utils;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Force implements SubCommand {
 
@@ -47,5 +50,18 @@ public class Force implements SubCommand {
                 sender.sendMessage(Messages.trigger_attempting.getMessage());
             }
         });
+    }
+
+    @Override
+    public List<String> getTabCompletion(String[] args) {
+        if (args.length == 2) {
+            List<String> numbers = new ArrayList<>();
+
+            for (int amount = 1; amount < 60; amount++) numbers.add(String.valueOf(amount));
+
+            return numbers;
+        }
+
+        return Collections.emptyList();
     }
 }
