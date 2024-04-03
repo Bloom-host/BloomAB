@@ -1,8 +1,9 @@
 package host.bloom.ab.velocity;
 
 import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
 import host.bloom.ab.common.commands.Sender;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import java.util.UUID;
 
 public class VelocitySender implements Sender {
 
@@ -22,4 +23,26 @@ public class VelocitySender implements Sender {
         return this.source.hasPermission(permission);
     }
 
+    @Override
+    public void actionbar(String message) {
+        if (!isPlayer()) return;
+
+        Player player = (Player) this.source;
+
+        player.sendActionBar(VelocityMethods.color(message));
+    }
+
+    @Override
+    public boolean isPlayer() {
+        return this.source instanceof Player;
+    }
+
+    @Override
+    public UUID getUUID() {
+        if (!isPlayer()) return null;
+
+        Player player = (Player) this.source;
+
+        return player.getUniqueId();
+    }
 }
