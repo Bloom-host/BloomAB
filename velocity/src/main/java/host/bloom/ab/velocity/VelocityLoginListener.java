@@ -3,6 +3,9 @@ package host.bloom.ab.velocity;
 import com.velocitypowered.api.event.PostOrder;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.ConnectionHandshakeEvent;
+import com.velocitypowered.api.event.connection.DisconnectEvent;
+import com.velocitypowered.api.event.connection.LoginEvent;
+import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.proxy.connection.client.LoginInboundConnection;
 
 public class VelocityLoginListener {
@@ -20,4 +23,10 @@ public class VelocityLoginListener {
         }
     }
 
+    @Subscribe
+    public void onQuit(DisconnectEvent event) {
+        Player player = event.getPlayer();
+
+        this.plugin.getManager().removeSeer(player.getUniqueId());
+    }
 }
