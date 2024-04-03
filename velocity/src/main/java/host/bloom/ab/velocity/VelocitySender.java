@@ -4,6 +4,7 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
 import host.bloom.ab.common.commands.Sender;
 import java.util.UUID;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 public class VelocitySender implements Sender {
 
@@ -15,7 +16,7 @@ public class VelocitySender implements Sender {
 
     @Override
     public void sendMessage(String message) {
-        this.source.sendMessage(VelocityMethods.color(message));
+        this.source.sendMessage(MiniMessage.miniMessage().deserialize(message));
     }
 
     @Override

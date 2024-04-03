@@ -1,12 +1,13 @@
 package host.bloom.ab.common.commands.sub;
 
-import host.bloom.ab.common.AbstractPlugin;
+import ch.jalu.configme.SettingsManager;
 import host.bloom.ab.common.commands.Sender;
 import host.bloom.ab.common.commands.SubCommand;
-import host.bloom.ab.common.config.Location;
+import host.bloom.ab.common.config.ConfigKeys;
+import host.bloom.ab.common.config.enums.Location;
+import host.bloom.ab.common.config.enums.Messages;
+import host.bloom.ab.common.managers.ConfigManager;
 import host.bloom.ab.common.utils.Utils;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,11 +15,7 @@ import java.util.List;
 
 public class Set implements SubCommand {
 
-    private final AbstractPlugin plugin;
-
-    public Set(AbstractPlugin plugin) {
-        this.plugin = plugin;
-    }
+    public Set() {}
 
     @Override
     public String getPermission() {
@@ -27,71 +24,65 @@ public class Set implements SubCommand {
 
     @Override
     public void run(Sender sender, String[] args) {
+        SettingsManager config = ConfigManager.getConfig();
+
         if (args.length < 2) {
-            sender.sendMessage("&cUsage: /bab set <duration/maxjps/location> <value>");
+            sender.sendMessage(Messages.invalid_usage.getMessage("{usage}", "/bab set [duration/maxjps/location] [value]"));
             return;
         }
 
         switch (args[1]) {
             case "duration":
                 if (args.length < 3) {
-                    sender.sendMessage("&cUsage: /bab set duration <seconds>");
+                    sender.sendMessage(Messages.invalid_usage.getMessage("{usage}", "/bab set duration [seconds]"));
                     return;
                 }
 
                 Integer duration = Utils.getInteger(args[2]);
                 if (duration == null) {
-                    sender.sendMessage("&cPlease enter a valid number!");
+                    sender.sendMessage(Messages.invalid_number.getMessage());
                     return;
                 }
 
                 if (duration > 3600) {
-                    sender.sendMessage("&cTrigger duration exceeds the maximum allowed value (3600 seconds).");
+                    sender.sendMessage(Messages.trigger_exceeds_duration.getMessage());
                     return;
                 }
 
-                plugin.getABConfig().triggerDuration = duration;
-                try {
-                    plugin.getABConfig().save();
-                } catch (IOException exception) {
-                    sender.sendMessage("&cUnable to save config: " + exception.getMessage());
-                    return;
-                }
+                config.setProperty(ConfigKeys.trigger_duration, duration);
+                config.save();
+                config.reload();
 
-                sender.sendMessage("Trigger duration set to " + duration + " seconds!");
+                sender.sendMessage(Messages.trigger_set_duration.getMessage("{duration}", String.valueOf(config.getProperty(ConfigKeys.trigger_duration))));
                 break;
 
             case "maxjps":
                 if (args.length < 3) {
-                    sender.sendMessage("&cUsage: /bab set maxjps <seconds>");
+                    sender.sendMessage(Messages.invalid_usage.getMessage("{usage}", "/bab set maxjps [seconds]"));
                     return;
                 }
 
                 Integer maxJps = Utils.getInteger(args[2]);
                 if (maxJps == null || maxJps == 0) {
-                    sender.sendMessage("&cPlease enter a valid number!");
+                    sender.sendMessage(Messages.invalid_number.getMessage());
                     return;
                 }
 
                 if (maxJps > 100000) {
-                    sender.sendMessage("&cMax joins per second exceeds the maximum allowed value (100000).");
+                    sender.sendMessage(Messages.exceeds_max_joins.getMessage());
                     return;
                 }
 
-                plugin.getABConfig().maxJoinsPerSecond = maxJps;
-                try {
-                    plugin.getABConfig().save();
-                } catch (IOException exception) {
-                    sender.sendMessage("&cUnable to save config: " + exception.getMessage());
-                    return;
-                }
+                config.setProperty(ConfigKeys.max_joins_per_second, maxJps);
+                config.save();
+                config.reload();
 
-                sender.sendMessage("Max joins per second set to " + maxJps + "!");
+                sender.sendMessage(Messages.max_join_set.getMessage("{value}", String.valueOf(config.getProperty(ConfigKeys.max_joins_per_second))));
                 break;
 
             case "location":
                 if (args.length < 3 || args[2].isEmpty()) {
-                    sender.sendMessage("&cUsage: /bab set location <location>");
+                    sender.sendMessage(Messages.invalid_usage.getMessage("{usage}", "/bab set location [location]"));
                     return;
                 }
 
@@ -99,23 +90,19 @@ public class Set implements SubCommand {
                 try {
                     location = Location.valueOf(args[2]);
                 } catch (IllegalArgumentException exception) {
-                    sender.sendMessage("&cInvalid location&f: &4" + args[2]);
+                    sender.sendMessage(Messages.invalid_location.getMessage("{location}", args[2]));
                     return;
                 }
 
-                plugin.getABConfig().location = location;
-                try {
-                    plugin.getABConfig().save();
-                } catch (IOException exception) {
-                    sender.sendMessage("&cUnable to save config&f: &4" + exception.getMessage());
-                    return;
-                }
+                config.setProperty(ConfigKeys.locations, location);
+                config.save();
+                config.reload();
 
-                sender.sendMessage("&eSet location to&f: &6" + location.getDisplayName());
+                sender.sendMessage(Messages.set_location.getMessage("{location}", config.getProperty(ConfigKeys.locations).getDisplayName()));
                 break;
 
             default:
-                sender.sendMessage("&cUsage: /bab set <duration/maxjps/location> <value>");
+                sender.sendMessage(Messages.invalid_usage.getMessage("{usage}", "/bab set [duration/maxjps/location] [value]"));
         }
     }
 
@@ -129,12 +116,18 @@ public class Set implements SubCommand {
             switch (args[1]) {
                 case "maxjps":
                 case "duration": {
-                    return Collections.singletonList("<number>");
+                    List<String> numbers = new ArrayList<>();
+
+                    for (int amount = 1; amount < 60; amount++) numbers.add(String.valueOf(amount));
+
+                    return numbers;
                 }
 
                 case "location": {
                     List<String> locations = new ArrayList<>();
+
                     for (Location location : Location.values()) locations.add(location.name());
+
                     return locations;
                 }
             }
@@ -142,5 +135,4 @@ public class Set implements SubCommand {
 
         return Collections.emptyList();
     }
-
 }

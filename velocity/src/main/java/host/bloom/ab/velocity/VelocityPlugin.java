@@ -9,14 +9,13 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.proxy.VelocityServer;
 import com.velocitypowered.proxy.network.ConnectionManager;
-import dev.geri.konfig.util.InvalidConfigurationException;
 import host.bloom.ab.common.AbstractPlugin;
-import host.bloom.ab.common.config.Config;
+import host.bloom.ab.common.config.ConfigKeys;
+import host.bloom.ab.common.managers.ConfigManager;
 import host.bloom.ab.common.managers.CounterManager;
 import host.bloom.ab.common.utils.Logger;
 import host.bloom.ab.common.utils.Scheduler;
-
-import java.io.IOException;
+import java.io.File;
 import java.lang.reflect.Field;
 import java.nio.file.Paths;
 import java.util.Optional;
@@ -29,7 +28,6 @@ public class VelocityPlugin implements AbstractPlugin {
     private final VelocityLogger logger;
     private PluginContainer plugin;
     private CounterManager manager;
-    private Config config;
 
     @Inject
     public VelocityPlugin(ProxyServer server, org.slf4j.Logger logger) {
@@ -42,13 +40,8 @@ public class VelocityPlugin implements AbstractPlugin {
         // Initialize the plugin
         this.plugin = server.getPluginManager().ensurePluginContainer(this);
 
-        // Load the config
-        try {
-            this.config = Config.load(this, Paths.get("plugins", plugin.getDescription().getName().get()).toAbsolutePath().toString());
-        } catch (IOException | InvalidConfigurationException exception) {
-            this.getABLogger().error("Unable to load config, shutting down: " + exception.getMessage());
-            return;
-        }
+        // Load the configuration files.
+        ConfigManager.load(this);
 
         // Initialize the manager
         this.manager = new CounterManager(this);
@@ -57,8 +50,7 @@ public class VelocityPlugin implements AbstractPlugin {
         new VelocityCommandHandler(this, this.server.getCommandManager());
 
         // We can either use the built-in event or our own channel listener
-        if (this.config.catchRawConnections) {
-
+        if (ConfigManager.getConfig().getProperty(ConfigKeys.catch_raw_connections)) {
             // Initialize the login hook channel
             try {
                 Class<?> velocityServerClass = VelocityServer.class;
@@ -108,13 +100,13 @@ public class VelocityPlugin implements AbstractPlugin {
     }
 
     @Override
-    public Config getABConfig() {
-        return this.config;
+    public Platform getPlatform() {
+        return Platform.VELOCITY;
     }
 
     @Override
-    public Platform getPlatform() {
-        return Platform.VELOCITY;
+    public File getFolder() {
+        return Paths.get("plugins", plugin.getDescription().getName().get()).toFile();
     }
 
     @Override

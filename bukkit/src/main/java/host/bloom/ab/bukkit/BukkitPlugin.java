@@ -1,8 +1,7 @@
 package host.bloom.ab.bukkit;
 
-import dev.geri.konfig.util.InvalidConfigurationException;
 import host.bloom.ab.common.AbstractPlugin;
-import host.bloom.ab.common.config.Config;
+import host.bloom.ab.common.managers.ConfigManager;
 import host.bloom.ab.common.managers.CounterManager;
 import host.bloom.ab.common.utils.Logger;
 import host.bloom.ab.common.utils.Scheduler;
@@ -12,11 +11,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 import java.util.UUID;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import java.io.File;
 
 public class BukkitPlugin extends JavaPlugin implements AbstractPlugin {
 
+    private BukkitAudiences adventure;
+
     private BukkitLogger logger;
-    private Config config;
     private CounterManager manager;
 
     @Override
@@ -24,13 +28,11 @@ public class BukkitPlugin extends JavaPlugin implements AbstractPlugin {
         // Initialize the logger
         this.logger = new BukkitLogger(super.getLogger());
 
-        // Load the config
-        try {
-            this.config = Config.load(this, this.getDataFolder().getAbsolutePath());
-        } catch (IOException | InvalidConfigurationException exception) {
-            this.getABLogger().error("Unable to load config, shutting down: " + exception.getMessage());
-            return;
-        }
+        // Load the configuration files.
+        ConfigManager.load(this);
+
+        // Initialize an audiences instance for the plugin
+        this.adventure = BukkitAudiences.create(this);
 
         // Initialize the manager
         this.manager = new CounterManager(this);
@@ -43,6 +45,14 @@ public class BukkitPlugin extends JavaPlugin implements AbstractPlugin {
 
         // Handle other tasks
         this.afterStartup();
+    }
+
+    @Override
+    public void onDisable() {
+        if (this.adventure != null) {
+            this.adventure.close();
+            this.adventure = null;
+        }
     }
 
     @Override
@@ -66,13 +76,13 @@ public class BukkitPlugin extends JavaPlugin implements AbstractPlugin {
     }
 
     @Override
-    public Config getABConfig() {
-        return this.config;
+    public Platform getPlatform() {
+        return Platform.BUKKIT;
     }
 
     @Override
-    public Platform getPlatform() {
-        return Platform.BUKKIT;
+    public File getFolder() {
+        return getDataFolder();
     }
 
     @Override
@@ -94,4 +104,11 @@ public class BukkitPlugin extends JavaPlugin implements AbstractPlugin {
         return this.getServer().getPort();
     }
 
+    public @NotNull BukkitAudiences adventure() {
+        if (this.adventure == null) {
+            throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
+        }
+
+        return this.adventure;
+    }
 }
