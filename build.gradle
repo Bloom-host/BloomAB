@@ -50,6 +50,7 @@ subprojects {
         implementation 'net.kyori:adventure-platform-bukkit:4.3.2'
 
         implementation 'ch.jalu:configme:1.4.1'
+        implementation 'org.yaml:snakeyaml:2.2'
 
         // Use GSON for JSON processing
         implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
@@ -60,6 +61,7 @@ subprojects {
 task uberJar(type: ShadowJar) {
 
     // Relocate important dependencies to avoid any collisions at runtime
+    relocate 'org.yaml', 'host.bloom.ab.dependencies.snakeyaml'
     relocate 'ch.jalu', 'host.bloom.ab.dependencies.configme'
     relocate 'com.google.gson', 'host.bloom.ab.dependencies.gson'
     relocate 'org.apache.commons', 'host.bloom.ab.dependencies.apache.commons'
