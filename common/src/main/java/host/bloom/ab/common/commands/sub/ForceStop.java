@@ -4,8 +4,6 @@ import host.bloom.ab.common.AbstractPlugin;
 import host.bloom.ab.common.commands.Sender;
 import host.bloom.ab.common.commands.SubCommand;
 import host.bloom.ab.common.config.enums.Messages;
-import java.util.Collections;
-import java.util.List;
 
 public class ForceStop implements SubCommand {
 
@@ -29,11 +27,5 @@ public class ForceStop implements SubCommand {
 
         plugin.getManager().setForceTrigger(false, 0);
         sender.sendMessage(Messages.trigger_manually_stopped.getMessage());
-    }
-
-    @Override
-    public List<String> getTabCompletion(String[] args) {
-        if (args.length == 2) return Collections.singletonList("[seconds]");
-        return Collections.emptyList();
     }
 }
