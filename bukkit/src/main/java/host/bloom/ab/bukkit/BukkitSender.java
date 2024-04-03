@@ -1,13 +1,10 @@
 package host.bloom.ab.bukkit;
 
 import host.bloom.ab.common.commands.Sender;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import java.util.UUID;
 import host.bloom.ab.common.utils.Utils;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +34,7 @@ public class BukkitSender implements Sender {
 
         Player player = (Player) sender;
 
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(BukkitMethods.color(message)));
+        this.plugin.adventure().sender(player).sendActionBar(Utils.color(message));
     }
 
     @Override

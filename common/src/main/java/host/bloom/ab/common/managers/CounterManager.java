@@ -1,8 +1,11 @@
 package host.bloom.ab.common.managers;
 
 import ch.jalu.configme.SettingsManager;
+import com.sun.xml.internal.ws.api.message.Message;
 import host.bloom.ab.common.AbstractPlugin;
 import host.bloom.ab.common.config.ConfigKeys;
+import host.bloom.ab.common.config.enums.Messages;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -169,7 +172,7 @@ public class CounterManager {
             plugin.getABLogger().info("Number of received JPS: " + currentCount);
 
             if (!this.seers.isEmpty()) {
-                this.seers.forEach(uuid -> this.plugin.actionbar(uuid, "&6&lBloomAB &8» &6JPS &e" + currentCount + "/sec"));
+                this.seers.forEach(uuid -> this.plugin.actionbar(uuid, Messages.action_bar.getMessage("{joins}", String.valueOf(currentCount))));
             }
         }
     }

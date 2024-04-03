@@ -15,6 +15,8 @@ import host.bloom.ab.common.managers.ConfigManager;
 import host.bloom.ab.common.managers.CounterManager;
 import host.bloom.ab.common.utils.Logger;
 import host.bloom.ab.common.utils.Scheduler;
+import host.bloom.ab.common.utils.Utils;
+
 import java.io.File;
 import java.lang.reflect.Field;
 import java.nio.file.Paths;
@@ -113,7 +115,7 @@ public class VelocityPlugin implements AbstractPlugin {
     public void actionbar(UUID uuid, String message) {
         Optional<Player> player = this.server.getPlayer(uuid);
 
-        player.ifPresent(value -> value.sendActionBar(VelocityMethods.color(message)));
+        player.ifPresent(value -> value.sendActionBar(Utils.color(message)));
     }
 
     @Override

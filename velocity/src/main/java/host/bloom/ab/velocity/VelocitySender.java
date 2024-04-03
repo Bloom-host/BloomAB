@@ -4,6 +4,7 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
 import host.bloom.ab.common.commands.Sender;
 import java.util.UUID;
+import host.bloom.ab.common.utils.Utils;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
 public class VelocitySender implements Sender {
@@ -30,7 +31,7 @@ public class VelocitySender implements Sender {
 
         Player player = (Player) this.source;
 
-        player.sendActionBar(VelocityMethods.color(message));
+        player.sendActionBar(Utils.color(message));
     }
 
     @Override

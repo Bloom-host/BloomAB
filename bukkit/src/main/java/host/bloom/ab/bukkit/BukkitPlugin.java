@@ -5,14 +5,11 @@ import host.bloom.ab.common.managers.ConfigManager;
 import host.bloom.ab.common.managers.CounterManager;
 import host.bloom.ab.common.utils.Logger;
 import host.bloom.ab.common.utils.Scheduler;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
+import host.bloom.ab.common.utils.Utils;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import java.io.IOException;
 import java.util.UUID;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.io.File;
 
@@ -90,7 +87,7 @@ public class BukkitPlugin extends JavaPlugin implements AbstractPlugin {
         Player player = getPlayer(uuid);
 
         if (player != null) {
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(BukkitMethods.color(message)));
+            this.adventure.sender(player).sendActionBar(Utils.color(message));
         }
     }
 
