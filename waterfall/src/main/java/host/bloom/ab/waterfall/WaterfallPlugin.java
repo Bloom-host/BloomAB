@@ -6,10 +6,13 @@ import host.bloom.ab.common.config.Config;
 import host.bloom.ab.common.managers.CounterManager;
 import host.bloom.ab.common.utils.Logger;
 import host.bloom.ab.common.utils.Scheduler;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ListenerInfo;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
-
 import java.io.IOException;
+import java.util.UUID;
 
 public class WaterfallPlugin extends Plugin implements AbstractPlugin {
 
@@ -36,6 +39,9 @@ public class WaterfallPlugin extends Plugin implements AbstractPlugin {
 
         // Initialize the commands
         getProxy().getPluginManager().registerCommand(this, new WaterfallCommandHandler(this));
+
+        // Initialize the quit listener.
+        getProxy().getPluginManager().registerListener(this, new WaterfallQuitListener(this.manager));
 
         // Initialize the login hook channel
         new WaterfallLoginHookChannel(manager);
@@ -73,6 +79,20 @@ public class WaterfallPlugin extends Plugin implements AbstractPlugin {
     @Override
     public Platform getPlatform() {
         return Platform.WATERFALL;
+    }
+
+    @Override
+    public void actionbar(UUID uuid, String message) {
+        ProxiedPlayer player = getPlayer(uuid);
+
+        if (player != null) {
+            player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(WaterfallMethods.color(message)));
+        }
+    }
+
+    @Override
+    public ProxiedPlayer getPlayer(UUID uuid) {
+        return getProxy().getPlayer(uuid);
     }
 
     @Override

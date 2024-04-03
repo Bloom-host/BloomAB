@@ -6,9 +6,12 @@ import host.bloom.ab.common.config.Config;
 import host.bloom.ab.common.managers.CounterManager;
 import host.bloom.ab.common.utils.Logger;
 import host.bloom.ab.common.utils.Scheduler;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import java.io.IOException;
+import java.util.UUID;
 
 public class BukkitPlugin extends JavaPlugin implements AbstractPlugin {
 
@@ -70,6 +73,20 @@ public class BukkitPlugin extends JavaPlugin implements AbstractPlugin {
     @Override
     public Platform getPlatform() {
         return Platform.BUKKIT;
+    }
+
+    @Override
+    public void actionbar(UUID uuid, String message) {
+        Player player = getPlayer(uuid);
+
+        if (player != null) {
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(BukkitMethods.color(message)));
+        }
+    }
+
+    @Override
+    public Player getPlayer(UUID uuid) {
+        return getServer().getPlayer(uuid);
     }
 
     @Override
