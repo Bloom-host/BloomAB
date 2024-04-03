@@ -1,8 +1,11 @@
 package host.bloom.ab.common.utils;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class Utils {
 
@@ -76,4 +79,23 @@ public class Utils {
         return accessibleObject;
     }
 
+    /**
+     * Loops through a string-list and returns a string builder
+     *
+     * @param list to convert
+     * @return the string-builder
+     */
+    public static String convertList(List<String> list) {
+        StringBuilder message = new StringBuilder();
+
+        for (String line : list) {
+            message.append(line).append("\n");
+        }
+
+        return message.toString();
+    }
+
+    public static Component color(String message) {
+        return MiniMessage.miniMessage().deserialize(message);
+    }
 }
