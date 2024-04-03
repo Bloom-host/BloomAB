@@ -1,6 +1,7 @@
 package host.bloom.ab.common.commands;
 
 import host.bloom.ab.common.AbstractPlugin;
+import host.bloom.ab.common.commands.sub.ActionBar;
 import host.bloom.ab.common.commands.sub.Force;
 import host.bloom.ab.common.commands.sub.ForceStop;
 import host.bloom.ab.common.commands.sub.Set;
@@ -17,6 +18,7 @@ public class Handler {
 
     public Handler(AbstractPlugin plugin) {
         this.plugin = plugin;
+        commands.put("actionbar", new ActionBar(plugin));
         commands.put("forcestop", new ForceStop(plugin));
         commands.put("force", new Force(plugin));
         commands.put("set", new Set(plugin));
@@ -89,6 +91,7 @@ public class Handler {
 			"&6&lBloomAB COMMANDS&r:",
 			"&e/bab force &6<seconds>&r: &7Enable force trigger for X seconds",
 			"&e/bab forcestop&r: &7Force stop the trigger and keep it disabled until the finish of the attack",
+            "&e/bab actionbar&r: &7Lets you see the joins per second above your hotbar.",
 			"&e/bab set maxjps &6<number>&r: &7Set max joins per second",
 			"&e/bab set duration &6<seconds>&r: &7Set trigger duration",
 			"&e/bab set location &6<location>&r: &7Set server location",
