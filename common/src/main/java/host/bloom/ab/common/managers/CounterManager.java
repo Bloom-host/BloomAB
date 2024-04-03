@@ -44,7 +44,7 @@ public class CounterManager {
 
             HttpURLConnection conn = null;
             try {
-                conn = (HttpURLConnection) new URL(this.config.getProperty(ConfigKeys.api_endpoint)).openConnection();
+                conn = (HttpURLConnection) new URL(this.config.getProperty(ConfigKeys.locations).getEndpoint()).openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 conn.setRequestProperty("User-Agent", "BloomAB");
