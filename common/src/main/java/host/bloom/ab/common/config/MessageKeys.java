@@ -63,20 +63,20 @@ public class MessageKeys implements SettingsHolder {
     public static final Property<String> invalid_location = newProperty("set.invalid-location", "{prefix} <red>Invalid location<white>: <dark_red>{location}");
 
     public static final Property<List<String>> help = newListProperty("misc.help", new ArrayList<String>() {{
-        add("<dark_gray><underlined>");
+        add("<dark_gray>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         add("<bold><gold>BloomAB Commands</bold><reset>:");
         add("<yellow>/bab force <gold>[seconds]: <gray>Enable force trigger for X seconds");
         add("<yellow>/bab forcestop: <gray>Force stop the trigger and keep it disabled until the finish of the attack");
         add("<yellow>/bab set maxjps <gold>[number]: <gray>Set max joins per second");
         add("<yellow>/bab set duration <gold>[seconds]: <gray>Set trigger duration");
         add("<yellow>/bab set location <gold>[location]: <gray>Set server location");
-
+        add("");
         add("<bold><gold>Connection Stats<reset>:");
         add("<gray>• <yellow>Trigger joins per second: <gold>{jps} rps");
         add("<gray>• <yellow>Trigger duration: <gold>{duration} seconds");
         add("<gray>• <yellow>Block new joins: <gold>{value}");
         add("<gray>• <yellow>Current joins per second: <gold>{cjps}");
         add("<gray>• {status}");
-        add("<dark_gray><underlined>");
+        add("<dark_gray>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     }});
 }
