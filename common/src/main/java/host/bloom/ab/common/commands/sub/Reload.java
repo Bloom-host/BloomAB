@@ -9,7 +9,7 @@ public class Reload implements SubCommand {
 
     @Override
     public String getPermission() {
-        return "bab.reload";
+        return "bab.admin.reload";
     }
 
     @Override
