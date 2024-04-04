@@ -18,8 +18,7 @@ public class ConfigKeys implements SettingsHolder {
     public void registerComments(@NotNull CommentsConfiguration conf) {
         String[] header = {
                 "If you have any questions, Please contact us at:",
-                "",
-                "Support: discord.gg/bloom"
+                "https://bloom.host/support"
         };
 
         conf.setComment("limits", header);
