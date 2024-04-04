@@ -27,6 +27,7 @@ public class VelocityLoginListener {
     public void onQuit(DisconnectEvent event) {
         Player player = event.getPlayer();
 
+        // Always remove it just in case as they might not have the permission.
         this.plugin.getManager().removeSeer(player.getUniqueId());
     }
 
