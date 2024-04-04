@@ -50,6 +50,7 @@ subprojects {
         implementation 'net.kyori:adventure-platform-bukkit:4.3.2'
 
         implementation 'ch.jalu:configme:1.4.1'
+        // This is needed for older versions of Minecraft.
         implementation 'org.yaml:snakeyaml:2.2'
 
         // Use GSON for JSON processing
