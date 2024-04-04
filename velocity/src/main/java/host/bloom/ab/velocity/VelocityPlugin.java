@@ -51,6 +51,8 @@ public class VelocityPlugin implements AbstractPlugin {
         // Initialize the commands
         new VelocityCommandHandler(this, this.server.getCommandManager());
 
+        this.server.getEventManager().register(this, new VelocityLoginListener(this));
+
         // We can either use the built-in event or our own channel listener
         if (ConfigManager.getConfig().getProperty(ConfigKeys.catch_raw_connections)) {
             // Initialize the login hook channel
@@ -67,15 +69,12 @@ public class VelocityPlugin implements AbstractPlugin {
                 // Handle other tasks
                 this.afterStartup();
                 return;
-
             } catch (Exception exception) {
                 // Impossible to get exception, only for new version of Velocity.
                 this.getABLogger().error("Unable to initialize raw connection catcher, using built-in events: " + exception.getMessage());
                 exception.printStackTrace();
             }
         }
-
-        server.getEventManager().register(this, new VelocityLoginListener(this));
 
         // Handle other tasks
         this.afterStartup();
