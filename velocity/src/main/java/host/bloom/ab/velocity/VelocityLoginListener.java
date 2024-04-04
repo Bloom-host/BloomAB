@@ -7,6 +7,8 @@ import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.connection.LoginEvent;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.proxy.connection.client.LoginInboundConnection;
+import host.bloom.ab.common.config.ConfigKeys;
+import host.bloom.ab.common.managers.ConfigManager;
 
 public class VelocityLoginListener {
 
@@ -18,8 +20,10 @@ public class VelocityLoginListener {
 
     @Subscribe(order = PostOrder.FIRST)
     public void onLoginInbound(ConnectionHandshakeEvent event) {
-        if (event.getConnection() instanceof LoginInboundConnection) {
-            plugin.getManager().incrementConnectionCount();
+        if (!ConfigManager.getConfig().getProperty(ConfigKeys.catch_raw_connections)) {
+            if (event.getConnection() instanceof LoginInboundConnection) {
+                this.plugin.getManager().incrementConnectionCount();
+            }
         }
     }
 
