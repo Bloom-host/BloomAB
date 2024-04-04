@@ -21,7 +21,7 @@ public class BukkitLoginListener implements Listener {
 
         Player player = e.getPlayer();
 
-        if (player.hasPermission("bab.admin.actionbar")) {
+        if (player.hasPermission("bab.admin.actionbar.onjoin")) {
             this.plugin.getManager().addSeer(player.getUniqueId());
         }
     }

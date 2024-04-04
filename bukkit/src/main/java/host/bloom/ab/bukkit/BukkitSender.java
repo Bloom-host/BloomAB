@@ -5,16 +5,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import java.util.UUID;
 import host.bloom.ab.common.utils.Utils;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 public class BukkitSender implements Sender {
 
-    private final @NotNull BukkitPlugin plugin = JavaPlugin.getPlugin(BukkitPlugin.class);
-
+    private final BukkitPlugin plugin;
     private final CommandSender sender;
 
-    public BukkitSender(CommandSender sender) {
+    public BukkitSender(BukkitPlugin plugin, CommandSender sender) {
+        this.plugin = plugin;
         this.sender = sender;
     }
 
