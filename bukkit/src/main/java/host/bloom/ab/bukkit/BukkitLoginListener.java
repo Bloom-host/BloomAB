@@ -33,6 +33,7 @@ public class BukkitLoginListener implements Listener {
 
     @EventHandler
     public void onPlayerQuitEvent(PlayerQuitEvent event) {
+        // Always remove it just in case as they might not have the permission.
         this.plugin.getManager().removeSeer(event.getPlayer().getUniqueId());
     }
 }

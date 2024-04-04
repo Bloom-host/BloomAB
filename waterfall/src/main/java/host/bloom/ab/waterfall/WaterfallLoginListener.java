@@ -26,6 +26,7 @@ public class WaterfallLoginListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerDisconnectEvent event) {
+        // Always remove it just in case as they might not have the permission.
         this.manager.removeSeer(event.getPlayer().getUniqueId());
     }
 }
