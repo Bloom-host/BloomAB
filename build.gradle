@@ -65,7 +65,7 @@ task uberJar(type: ShadowJar) {
     relocate 'ch.jalu', 'host.bloom.ab.dependencies.configme'
     relocate 'com.google.gson', 'host.bloom.ab.dependencies.gson'
     relocate 'org.apache.commons', 'host.bloom.ab.dependencies.apache.commons'
-    // do not relocate, it breaks.
+    // do not relocate, Kyori does not like being relocated, it will scream about "no class found"
     //relocate 'net.kyori', 'host.bloom.ab.dependencies.kyori'
 
     // Set the output file name and location
