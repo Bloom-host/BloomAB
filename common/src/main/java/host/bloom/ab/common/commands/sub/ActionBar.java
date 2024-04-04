@@ -3,6 +3,7 @@ package host.bloom.ab.common.commands.sub;
 import host.bloom.ab.common.AbstractPlugin;
 import host.bloom.ab.common.commands.Sender;
 import host.bloom.ab.common.commands.SubCommand;
+import host.bloom.ab.common.config.enums.Messages;
 import host.bloom.ab.common.managers.CounterManager;
 
 public class ActionBar implements SubCommand {
@@ -20,21 +21,16 @@ public class ActionBar implements SubCommand {
 
     @Override
     public void run(Sender sender, String[] args) {
-        if (args.length < 1) {
-            sender.sendMessage("&eUsage: /bab actionbar");
-            return;
-        }
-
         if (this.counterManager.containsSeer(sender.getUUID())) {
             this.counterManager.removeSeer(sender.getUUID());
 
-            sender.sendMessage("&eYou are no longer receiving notifications.");
+            sender.sendMessage(Messages.action_bar_disabled.getMessage());
 
             return;
         }
 
         this.counterManager.addSeer(sender.getUUID());
 
-        sender.sendMessage("&eYou are now receiving notifications.");
+        sender.sendMessage(Messages.action_bar_enabled.getMessage());
     }
 }

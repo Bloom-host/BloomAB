@@ -28,6 +28,8 @@ public enum Messages {
     trigger_exceeds_duration(MessageKeys.trigger_exceeds_duration),
     trigger_set_duration(MessageKeys.trigger_set_duration),
     action_bar(MessageKeys.action_bar),
+    action_bar_enabled(MessageKeys.action_bar_enabled),
+    action_bar_disabled(MessageKeys.action_bar_disabled),
     exceeds_max_joins(MessageKeys.exceeds_max_joins),
     max_join_set(MessageKeys.max_join_set),
     set_location(MessageKeys.set_location),
