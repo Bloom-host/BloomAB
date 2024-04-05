@@ -3,7 +3,7 @@ dependencies {
     implementation project(':common')
 
     // We use some BungeeCord internals, so we have to use the JAR
-    compileOnly files('libs/waterfall-1.20-562.jar')
+    compileOnly files('libs/waterfall-1.20-572.jar')
 }
 
 // We explicitly skip --release 8 for this, since unsafe would fail
