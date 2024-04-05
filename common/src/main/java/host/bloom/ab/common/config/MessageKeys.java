@@ -53,7 +53,7 @@ public class MessageKeys implements SettingsHolder {
 
     public static final Property<String> action_bar = newProperty("trigger.action-bar", "{prefix} <gold>JPS <yellow>{joins}/sec");
 
-    public static final Property<String> action_bar_enabled = newProperty("trigger.action-bar-enabled", ",gold>You are now receiving notifications.");
+    public static final Property<String> action_bar_enabled = newProperty("trigger.action-bar-enabled", "<gold>You are now receiving notifications.");
 
     public static final Property<String> action_bar_disabled = newProperty("trigger.action-bar-disabled", "<gold>You are no longer receiving notifications.");
 
