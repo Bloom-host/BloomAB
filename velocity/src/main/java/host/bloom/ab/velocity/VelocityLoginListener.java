@@ -39,7 +39,7 @@ public class VelocityLoginListener {
     public void onJoin(LoginEvent event) {
         Player player = event.getPlayer();
 
-        if (player.hasPermission("bab.admin.actionbar.autoenable")) {
+        if (player.hasPermission("bab.admin.actionbar.onjoin")) {
             this.plugin.getManager().addSeer(player.getUniqueId());
         }
     }

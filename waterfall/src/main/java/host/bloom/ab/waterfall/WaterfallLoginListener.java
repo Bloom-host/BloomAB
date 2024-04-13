@@ -19,7 +19,7 @@ public class WaterfallLoginListener implements Listener {
     public void onJoin(PostLoginEvent event) {
         ProxiedPlayer player = event.getPlayer();
 
-        if (player.hasPermission("bab.admin.actionbar.autoenable")) {
+        if (player.hasPermission("bab.admin.actionbar.onjoin")) {
             this.manager.addSeer(player.getUniqueId());
         }
     }
