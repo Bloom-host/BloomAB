@@ -15,7 +15,7 @@ java {
 
 ext {
     pluginName = 'BloomAB'
-    pluginVersion = '1.5.4'
+    pluginVersion = '1.5.5'
     pluginDescription = 'Anti bot protection for Bloom servers'
     pluginAuthor = 'Bloom'
     pluginWebsite = 'https://bloom.host'
