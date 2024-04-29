@@ -88,7 +88,7 @@ public class Set implements SubCommand {
 
                 Location location;
                 try {
-                    location = Location.valueOf(args[2]);
+                    location = Location.valueOf(args[2].toUpperCase());
                 } catch (IllegalArgumentException exception) {
                     sender.sendMessage(Messages.invalid_location.getMessage("{location}", args[2]));
                     return;
