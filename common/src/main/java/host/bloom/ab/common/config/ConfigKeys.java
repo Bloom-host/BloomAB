@@ -33,7 +33,7 @@ public class ConfigKeys implements SettingsHolder {
 
     public static final Property<String> api_secret = newProperty("api.secret", "disabled");
 
-    @Comment("Supported locations: ASHBURN, LOS_ANGELES, GERMANY")
+    @Comment("Supported locations: ASHBURN, DALLAS, LOS_ANGELES, GERMANY")
     public static final Property<Location> locations = newBeanProperty(Location.class, "options.location", Location.ASHBURN);
 
     public static final Property<Boolean> catch_raw_connections = newProperty("options.catch-raw-connections", true);
